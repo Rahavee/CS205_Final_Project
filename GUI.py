@@ -1,26 +1,46 @@
 import pygame
 
+gameArray = [[2, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 4, 0, 0, 0], [0, 0, 0, 2, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+             [0, 0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
+
+
 # function to get the array from the backend
 def updateGameArray():
     global gameArray
-    gameArray = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
 
-# function to send the array to the backened
+# function to send the array to the backend
 def getGameArray():
     return gameArray
 
 
 # function to draw the 8x8 board and the pieces
 def drawBoard():
+    global gameArray
+    # To draw the grid squares
     x = 20
     y = 50
-    for i in range(0,7):
-        for j in range(0,7):
-            pygame.draw.rect(screen, (0, 0, 255), (x, y, 90, 90))
-            x = x + 91
+    square = 90
+    for i in range(0, 8):
+        for j in range(0, 8):
+            pygame.draw.rect(screen, (0, 0, 255), (x, y, square, square))
+            x = x + square + 1
         x = 20
-        y = y + 91
+        y = y + square + 1
+
+    # drawing the playing pieces
+    radius = 35
+    xCir = 65
+    yCir = 95
+    for i in range(len(gameArray)):
+        for j in range(len(gameArray[i])):
+            if gameArray[i][j] == 1:
+                pygame.draw.circle(screen, (0, 255, 0), (xCir, yCir), radius)
+            if gameArray[i][j] == 2:
+                pygame.draw.circle(screen, (255, 0, 0), (xCir, yCir), radius)
+            xCir = xCir + square +1
+        xCir = 65
+        yCir = yCir + square + 1
 
 
 def mainGameLoop():
@@ -49,5 +69,6 @@ def mainGameLoop():
 
     # Done! Time to quit.
     pygame.quit()
+
 
 mainGameLoop()
