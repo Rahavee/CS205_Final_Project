@@ -92,6 +92,8 @@ def mainGameLoop():
         # Flip the display
         pygame.display.flip()
 
+        # TODO: A check to make sure the player still has playable moves. Boolean value maybe?
+
     # Done! Time to quit.
     pygame.quit()
 

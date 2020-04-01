@@ -1,7 +1,7 @@
 import pygame
 
 
-class Button():
+class Button:
 
     # the constructor for the button class, with optional label
     def __init__(self, screen, color, x, y, width, height, label=""):
@@ -19,6 +19,7 @@ class Button():
         self.centerY = self.y + self.height / 2
         return self.centerX
 
+    # to check if the mouse is over the button
     def isOver(self, mouse):
         if self.x < mouse[0] < self.x + self.width:
             if self.y < mouse[1] < self.y + self.height:
