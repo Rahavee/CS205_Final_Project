@@ -3,9 +3,15 @@ from Button import Button
 
 # global variables
 tiles = []
+bgOptions = []
 running = True
 gameArray = [[0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 2, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
              [0, 0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
+green = (0, 255, 0)
+blue = (0, 0, 255)
+red = (255, 0, 0)
+purple = (125, 0, 125)
+background = green
 
 
 # function to get the array from the backend
@@ -32,7 +38,7 @@ def drawBoard(screen):
     square = 90
     for i in range(0, 8):
         for j in range(0, 8):
-            tiles.append(Button(screen, (0, 255, 0), x, y, square, square))
+            tiles.append(Button(screen, background, x, y, square, square))
             x = x + square + 1
         x = 20
         y = y + square + 1
@@ -44,16 +50,27 @@ def drawBoard(screen):
     for i in range(len(gameArray)):
         for j in range(len(gameArray[i])):
             if gameArray[i][j] == 1:
-                pygame.draw.circle(screen, (50, 0, 0), (xCir, yCir), radius)
+                pygame.draw.circle(screen, (255, 255, 255), (xCir, yCir), radius)
             if gameArray[i][j] == 2:
-                pygame.draw.circle(screen, (255, 0, 0), (xCir, yCir), radius)
+                pygame.draw.circle(screen, (0, 0, 0), (xCir, yCir), radius)
             xCir = xCir + square + 1
         xCir = 65
         yCir = yCir + square + 1
 
 
+# buttons for changing the background color
+def changeBackground(screen):
+    global bgOptions
+    bgOptions=[]
+    Button(screen, (255, 255, 255), 900, 300, 100, 100, "background color")
+    bgOptions.append(Button(screen, red, 800, 400, 30, 30))
+    bgOptions.append(Button(screen, blue, 840, 400, 30, 30))
+    bgOptions.append(Button(screen, purple, 880, 400, 30, 30))
+    bgOptions.append(Button(screen, green, 920, 400, 30, 30))
+
+
 def eventListener(position):
-    global running, gameArray
+    global running, gameArray, background
     for event in pygame.event.get():
         # Did the user click the window close button?
         if event.type == pygame.QUIT:
@@ -68,13 +85,16 @@ def eventListener(position):
                     # TODO: Get who is playing from the backend and pick the color of tile accordingly
                     gameArray[row][column] = 1
                     # TODO: If playing against computer then call updateGameArray() here
+            for c in range(len(bgOptions)):
+                if bgOptions[c].isOver(position):
+                    background = bgOptions[c].color
 
 
 def mainGameLoop():
     pygame.init()
 
     # Set up the drawing window
-    screen = pygame.display.set_mode([1000, 800])
+    screen = pygame.display.set_mode([1200, 800])
 
     # Run until the user asks to quit
     while running:
@@ -83,6 +103,7 @@ def mainGameLoop():
 
         # Draw the screen elements
         drawBoard(screen)
+        changeBackground(screen)
         pygame.display.update()
 
         # get the mouse position and check whether there was a click
