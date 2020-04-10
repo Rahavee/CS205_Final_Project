@@ -84,15 +84,10 @@ class Board:
             opponent_piece = player_1
             player_piece = player_2
         for row in range(len(self.curr_layout)):
-            print(row)
             for piece in range(len(self.curr_layout[row])):
-                print(piece)
                 if (self.curr_layout[row][piece] == player_piece):
-                    print("")
-                    print("")
                     columnIndex = piece
                     rowIndex = row
-                    print("Checking Piece at row: " + str(rowIndex) + " Column: " + str(columnIndex))
                     self.curr_layout = self.checkDiagonals(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev, direction)
                     self.curr_layout = self.checkColumn(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev, direction)
                     self.curr_layout = self.checkRow(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev, direction)
@@ -116,10 +111,6 @@ class Board:
             else:
                 return self.curr_layout
         #check if these are valid moves
-        print("Check Row")
-        print("Row: " + str(row) + " " + "Column: " + str(column))
-        print(self.curr_layout[row])
-        print(self.curr_layout[row][column])
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout
         elif (self.curr_layout[row][column] == opponent):
@@ -130,7 +121,6 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space and opponent_prev):
             self.curr_layout[row][column] = possible_move
-            self.print_layout()
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
@@ -154,10 +144,6 @@ class Board:
             else:
                 return self.curr_layout
         #check if these are valid moves
-        print("Check Column")
-        print("Row: " + str(row) + " " + "Column: " + str(column))
-        print(self.curr_layout[row])
-        print(self.curr_layout[row][column])
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout
         elif (self.curr_layout[row][column] == opponent):
@@ -168,7 +154,6 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space and opponent_prev):
             self.curr_layout[row][column] = possible_move
-            self.print_layout()
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
@@ -223,10 +208,6 @@ class Board:
             else:
                 return self.curr_layout
         #check if these are valid moves
-        print("Check Diagnol")
-        print("Row: " + str(row) + " " + "Column: " + str(column))
-        print(self.curr_layout[row])
-        print(self.curr_layout[row][column])
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout
         elif (self.curr_layout[row][column] == opponent):
@@ -237,7 +218,6 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space and opponent_prev):
             self.curr_layout[row][column] = possible_move
-            self.print_layout()
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
