@@ -66,17 +66,37 @@ class Board:
     def set_showhide_moves(self, state):
         self.showhide_moves = state
         
+    def switchTurn(self):
+        if (self.get_current_turn() == 1):
+            self.curr_turn = 2
+        else:
+            self.curr_turn = 1
+        
+    def isPossibleMove(self):
+        for rowIndex in range(len(self.curr_layout)):
+            for columnIndex in range(len(self.curr_layout[rowIndex])):
+                #print(self.curr_layout[rowIndex][columnIndex])
+                if (self.curr_layout[rowIndex][columnIndex] == 3):
+                    return True
+                    #print("game still happening")
+        #print("game over")
+        return False
+    
+    
     def create_opponent(self):
         self.AI = opponent(self.difficulty)
         
-    def changePiece(self, move):
-        self.curr_layout[move[0]][move[1]] = self.curr_turn
-        
     def generate_legal_moves(self):
+        possible_move = 3
         direction = 0
         player_2 = 2
         player_1 = 1
         opponent_prev = False
+        #clear previous players possible moves
+        for row in range(len(self.curr_layout)):
+            for piece in range(len(self.curr_layout[row])):
+                if (self.curr_layout[row][piece] == possible_move):
+                    self.curr_layout[row][piece] = 0
         if (self.curr_turn == player_1):
             opponent_piece = player_2
             player_piece = player_1
@@ -100,13 +120,13 @@ class Board:
             self.curr_layout = self.checkRow(row, column, player, opponent, opponent_prev, 2)
         elif (direction == 1):
             #return if outside of board
-            if (len(self.curr_layout[row]) > column > 0):
+            if (len(self.curr_layout[row])-1 > column > 0):
                 column = column - 1
             else:
                 return self.curr_layout
         elif (direction == 2):
             #return if outside of board
-            if (len(self.curr_layout[row]) > column > 0):
+            if (len(self.curr_layout[row])-1 > column > 0):
                 column = column + 1
             else:
                 return self.curr_layout
@@ -133,17 +153,20 @@ class Board:
             self.curr_layout = self.checkColumn(row, column, player, opponent, opponent_prev, 2)
         elif (direction == 1):
             #return if outside of board
-            if (len(self.curr_layout) > row > 0):
+            if (len(self.curr_layout)-1 > row > 0):
                 row = row - 1
             else:
                 return self.curr_layout
         elif (direction == 2):
             #return if outside of board
-            if (len(self.curr_layout) > row > 0):
+            #print(len(self.curr_layout))
+            if (len(self.curr_layout)-1 > row > 0):
                 row = row + 1
             else:
                 return self.curr_layout
         #check if these are valid moves
+        #print("Row: " + str(row))
+        #print("Column: " + str(column))
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout
         elif (self.curr_layout[row][column] == opponent):
@@ -169,45 +192,47 @@ class Board:
             self.curr_layout = self.checkDiagonals(row, column, player, opponent, opponent_prev, 4)
         elif (direction == 1):
             #return if outside of board
-            if (len(self.curr_layout) > row > 0):
+            if (len(self.curr_layout)-1 > row > 0):
                 row = row - 1
             else:
                 return self.curr_layout
-            if (len(self.curr_layout[row]) > column > 0):
+            if (len(self.curr_layout[row])-1 > column > 0):
                 column = column - 1
             else:
                 return self.curr_layout
         elif (direction == 2):
             #return if outside of board
-            if (len(self.curr_layout) > row > 0):
+            if (len(self.curr_layout)-1 > row > 0):
                 row = row - 1
             else:
                 return self.curr_layout
-            if (len(self.curr_layout[row]) > column > 0):
+            if (len(self.curr_layout[row])-1 > column > 0):
                 column = column + 1
             else:
                 return self.curr_layout
         elif (direction == 3):
             #return if outside of board
-            if (len(self.curr_layout) > row > 0):
+            if (len(self.curr_layout)-1 > row > 0):
                 row = row + 1
             else:
                 return self.curr_layout
-            if (len(self.curr_layout[row]) > column > 0):
+            if (len(self.curr_layout[row])-1 > column > 0):
                 column = column - 1
             else:
                 return self.curr_layout
         elif (direction == 4):
             #return if outside of board
-            if (len(self.curr_layout) > row > 0):
+            if (len(self.curr_layout)-1 > row > 0):
                 row = row + 1
             else:
                 return self.curr_layout
-            if (len(self.curr_layout[row]) > column > 0):
+            if (len(self.curr_layout[row])-1 > column > 0):
                 column = column + 1
             else:
                 return self.curr_layout
         #check if these are valid moves
+        #print("Row: " + str(row))
+        #print("Column: " + str(column))
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout
         elif (self.curr_layout[row][column] == opponent):
