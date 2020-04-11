@@ -1,9 +1,11 @@
 import pygame
 from Button import Button
 from board import Board
+from AI import opponent
 
 # global variables
 game = Board(1, 1, 1)
+ai = opponent(True)
 tiles = []
 otherButtons = []
 bgOptions = []
@@ -152,6 +154,20 @@ def mainGameLoop():
         pygame.display.flip()
 
         # TODO: A check to make sure the player still has playable moves. Boolean value maybe?
+
+        game.generate_legal_moves()
+        game.print_layout()
+
+        if(game.get_current_turn() == 1): # If player 1's turn
+            if(game.place_piece( (row, column), 1)):
+                game.switchTurn()
+
+        else: # If player 2's turn
+            move = ai.pick_next_move(game.get_current_layout())
+            if(game.place_piece_(move)): # Returns True if place_piece succeeds
+                game.switchTurn()
+
+
 
     # Done! Time to quit.
     pygame.quit()

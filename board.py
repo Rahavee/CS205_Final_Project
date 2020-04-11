@@ -14,12 +14,12 @@ class Board:
         self.player2_pieces = 2
 
         self.curr_layout = [
-            [3,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],
             [0,0,0,1,2,0,0,0],
             [0,0,0,2,1,0,0,0],
-            [0,0,0,0,3,0,0,0],
+            [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0]]
 
@@ -27,7 +27,7 @@ class Board:
 
     def place_piece(self, move, player):
         # If the move is valid, will add the move to the board
-        y,x = move
+        x,y = move
         if (self.check_valid_move(move)):
             self.curr_layout[x][y] = player
 
@@ -40,42 +40,6 @@ class Board:
                     self.player1_pieces += 1
                 elif (number == 2):
                     self.player2_pieces += 1
-
-    def get_turn_from_human(self):
-
-        #TODO ----------------- PLACEHOLDER FOR TESTING -----------------
-        x,y = map(int, input("---------------Player 1: row and column to play (x y)? ---------------").split())
-        move = (x,y)
-        return move
-
-    def get_turn_from_ai(self, layout):
-
-        #TODO ----------------- PLACEHOLDER FOR TESTING -----------------
-        x,y = map(int, input("---------------Player 2: row and column to play (x y)? ---------------").split())
-        move = (x,y)
-        return move
-
-    # Retrieves move from whoever is currently in turn, AI or human
-    def get_turn_from_player(self, player_num):
-
-        if (player_num == 1):
-            return self.get_turn_from_human()
-
-        elif (player_num == 2):
-            return self.get_turn_from_ai(self.curr_layout)
-
-    # Gets the move being played for the current turn. If a valid move, plays the move, otherwise nothing
-    # GUI loop will call to swap turn if this function returns True, indicating the play was successful
-    def do_move(self):
-        
-        move = self.get_turn_from_player(self.curr_turn)
-
-        if(self.check_valid_move(move)):
-            self.place_piece(move, self.curr_turn)
-            return True # Indicates turn was successful
-
-        else:
-            False
 
     #def is_game_finished(self):
         #TODO check player 1 moves
