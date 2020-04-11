@@ -3,7 +3,7 @@ from Button import Button
 from board import Board
 
 # global variables
-game = Board(2, 1)
+game = Board(1, 1, 1)
 tiles = []
 otherButtons = []
 bgOptions = []
@@ -16,6 +16,8 @@ purple = (128, 0, 128)
 background = green
 widthLine = 0
 flag = False
+row = 0
+column = 0
 
 
 # function to get the array from the backend
@@ -88,9 +90,13 @@ def displayOtherButtons(screen):
     otherButtons = []
     otherButtons.append(Button(screen, (210, 210, 210), 900, 100, 100, 100, "Show moves"))
 
+#Returns the players moves
+def getNextMove():
+    return row, column
+
 
 def eventListener(position):
-    global running, gameArray, background, widthLine, flag
+    global running, gameArray, background, widthLine, flag, row, column
     for event in pygame.event.get():
         # Did the user click the window close button?
         if event.type == pygame.QUIT:
@@ -102,7 +108,7 @@ def eventListener(position):
                     row = t // 8
                     column = t % 8
                     # TODO: Send the row and column of where the user wants to place new tile and check if that is valid
-                    if game.place_piece(row, column, game.get_current_turn()):
+                    if game.place_piece((row, column), game.get_current_turn()):
                         # TODO: Get who is playing from the backend and pick the color of tile accordingly
                         gameArray[row][column] = game.get_current_turn()
                     # TODO: Flip the pieces
