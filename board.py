@@ -5,7 +5,9 @@ class Board:
     def __init__(self, num_humans, first_turn, difficulty):
         #TODO initial attributes in constructor - difficulty, show / hide moves, number of human players
 
+        self.num_humans = num_humans
         self.curr_turn = first_turn
+        self.difficulty = difficulty
 
         self.player1_pieces = 2
 
@@ -22,14 +24,14 @@ class Board:
             [0,0,0,0,0,0,0,0]]
 
         self.game_over = False
-        
-        self.difficulty = difficulty
 
-    def place_piece(self, x, y, player): # player is a number, 1 or 2, of whose piece it will be
-        # TODO check if valid move
-        self.curr_layout[x][y] = player
+    def place_piece(self, move, player):
+        # If the move is valid, will add the move to the board
+        y,x = move
+        if (self.check_valid_move(move)):
+            self.curr_layout[x][y] = player
 
-        # Reaccumulate all pieces on the board #TODO do this while looping for valid move
+        # Reaccumulate all pieces on the board
         self.player1_pieces = 0
         self.player2_pieces = 0
         for row in self.curr_layout:
@@ -38,11 +40,52 @@ class Board:
                     self.player1_pieces += 1
                 elif (number == 2):
                     self.player2_pieces += 1
-    
+
+    def get_turn_from_human(self):
+
+        #TODO ----------------- PLACEHOLDER FOR TESTING -----------------
+        x,y = map(int, input("---------------Player 1: row and column to play (x y)? ---------------").split())
+        move = (x,y)
+        return move
+
+    def get_turn_from_ai(self, layout):
+
+        #TODO ----------------- PLACEHOLDER FOR TESTING -----------------
+        x,y = map(int, input("---------------Player 2: row and column to play (x y)? ---------------").split())
+        move = (x,y)
+        return move
+
+    # Retrieves move from whoever is currently in turn, AI or human
+    def get_turn_from_player(self, player_num):
+
+        if (player_num == 1):
+            return self.get_turn_from_human()
+
+        elif (player_num == 2):
+            return self.get_turn_from_ai(self.curr_layout)
+
+    # Gets the move being played for the current turn. If a valid move, plays the move, otherwise nothing
+    # GUI loop will call to swap turn if this function returns True, indicating the play was successful
+    def do_move(self):
+        
+        move = self.get_turn_from_player(self.curr_turn)
+
+        if(self.check_valid_move(move)):
+            self.place_piece(move, self.curr_turn)
+            return True # Indicates turn was successful
+
+        else:
+            False
+
+    #def is_game_finished(self):
+        #TODO check player 1 moves
+        #TODO check player 2 moves
+
     def print_layout(self):
         print("===================")
         for row in self.curr_layout:
-            print ("| " + str(row[0]) + " " + str(row[1]) + " " + str(row[2]) + " " + str(row[3]) + " " + str(row[4]) + " " + str(row[5]) + " " + str(row[6]) + " " + str(row[7]) + " |")
+            print ("| " + str(row[0]) + " " + str(row[1]) + " " + str(row[2]) + " " + str(row[3]) + " " +
+            str(row[4]) + " " + str(row[5]) + " " + str(row[6]) + " " + str(row[7]) + " |")
         print("===================")
 
     # ---------- Getters and Setters ----------
@@ -58,19 +101,18 @@ class Board:
 
     def get_current_layout(self):
         return self.curr_layout
-    
-    #TODO unused, wrap into one function as "setters_GUI_start()"
-    def set_difficulty(self, difficulty):
-        self.difficulty = difficulty
-    
-    def set_showhide_moves(self, state):
-        self.showhide_moves = state
-        
+
     def switchTurn(self):
         if (self.get_current_turn() == 1):
             self.curr_turn = 2
         else:
             self.curr_turn = 1
+
+    def check_valid_move(self, move):
+        if (self.curr_layout[move[0]][move[1]] == 3):
+            return True
+        else:
+            return False
         
     def isPossibleMove(self):
         for rowIndex in range(len(self.curr_layout)):
@@ -81,11 +123,7 @@ class Board:
                     #print("game still happening")
         #print("game over")
         return False
-    
-    
-    def create_opponent(self):
-        self.AI = opponent(self.difficulty)
-        
+
     def generate_legal_moves(self):
         possible_move = 3
         direction = 0
@@ -144,7 +182,7 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
-    
+
     def checkColumn(self, row, column, player, opponent, opponent_prev, direction):
         possible_move = 3
         empty_space = 0
@@ -246,5 +284,4 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
-        
 
