@@ -90,7 +90,8 @@ class Board:
                     #print("game still happening")
         #print("game over")
         return False
-
+        
+    
     def generate_legal_moves(self):
         possible_move = 3
         direction = 0
@@ -251,4 +252,173 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
+            
+            
+    def flip_pieces(self, move):
+        rowIndex, columnIndex = move
+        possible_move = 3
+        direction = 0
+        player_2 = 2
+        player_1 = 1
+        opponent_prev = False
+        if (self.curr_turn == player_1):
+            opponent_piece = player_2
+            player_piece = player_1
+        else:
+            opponent_piece = player_1
+            player_piece = player_2
+        
+        self.curr_layout, valid_flip = self.flipDiagonals(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev, direction)
+        #print("Valid flip Diagnal: " + str(valid_flip))
+        self.curr_layout, valid_flip = self.flipColumn(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev, direction)
+        #print("Valid flip Column: " + str(valid_flip))
+        self.curr_layout, valid_flip = self.flipRow(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev, direction)
+        #print("Valid flip Row: " + str(valid_flip))
+
+    def flipRow(self, row, column, player, opponent, opponent_prev, direction):
+        possible_move = 3
+        empty_space = 0
+        valid_flip = False
+        if (direction == 0):
+            self.curr_layout, valid_flip = self.flipRow(row, column, player, opponent, opponent_prev, 1)
+            self.curr_layout, valid_flip = self.flipRow(row, column, player, opponent, opponent_prev, 2)
+        elif (direction == 1):
+            #return if outside of board
+            if (len(self.curr_layout[row])-1 > column > 0):
+                column = column - 1
+            else:
+                return self.curr_layout, valid_flip
+        elif (direction == 2):
+            #return if outside of board
+            if (len(self.curr_layout[row])-1 > column > 0):
+                column = column + 1
+            else:
+                return self.curr_layout, valid_flip
+        #check if these are valid moves
+        #print("row: " + str(row) + " Column: " + str(column))
+        #self.print_layout()
+        #print(self.curr_layout[row][column])
+        if (self.curr_layout[row][column] == possible_move):
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == opponent):
+            opponent_prev = True
+            self.curr_layout, valid_flip = self.flipRow(row, column, player, opponent, opponent_prev, direction)
+            if (valid_flip):
+                self.curr_layout[row][column] = player
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == player and opponent_prev):
+            valid_flip = True
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == player):
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == empty_space):
+            return self.curr_layout, valid_flip
+
+    def flipColumn(self, row, column, player, opponent, opponent_prev, direction):
+        possible_move = 3
+        empty_space = 0
+        valid_flip = False
+        if (direction == 0):
+            self.curr_layout, valid_flip = self.flipColumn(row, column, player, opponent, opponent_prev, 1)
+            self.curr_layout, valid_flip = self.flipColumn(row, column, player, opponent, opponent_prev, 2)
+        elif (direction == 1):
+            #return if outside of board
+            if (len(self.curr_layout)-1 > row > 0):
+                row = row - 1
+            else:
+                return self.curr_layout, valid_flip
+        elif (direction == 2):
+            #return if outside of board
+            #print(len(self.curr_layout))
+            if (len(self.curr_layout)-1 > row > 0):
+                row = row + 1
+            else:
+                return self.curr_layout, valid_flip
+        #check if these are valid moves
+        #print("Row: " + str(row))
+        #print("Column: " + str(column))
+        if (self.curr_layout[row][column] == possible_move):
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == opponent):
+            opponent_prev = True
+            self.curr_layout, valid_flip = self.flipColumn(row, column, player, opponent, opponent_prev, direction)
+            if (valid_flip):
+                self.curr_layout[row][column] = player
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == player and opponent_prev):
+            valid_flip = True
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == player):
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == empty_space):
+            return self.curr_layout, valid_flip
+        
+    def flipDiagonals(self, row, column, player, opponent, opponent_prev, direction):
+        possible_move = 3
+        empty_space = 0
+        valid_flip = False
+        #go left right etc
+        if (direction == 0):
+            self.curr_layout, valid_flip = self.flipDiagonals(row, column, player, opponent, opponent_prev, 1)
+            self.curr_layout, valid_flip = self.flipDiagonals(row, column, player, opponent, opponent_prev, 2)
+            self.curr_layout, valid_flip = self.flipDiagonals(row, column, player, opponent, opponent_prev, 3)
+            self.curr_layout, valid_flip = self.flipDiagonals(row, column, player, opponent, opponent_prev, 4)
+        elif (direction == 1):
+            #return if outside of board
+            if (len(self.curr_layout)-1 > row > 0):
+                row = row - 1
+            else:
+                return self.curr_layout, valid_flip
+            if (len(self.curr_layout[row])-1 > column > 0):
+                column = column - 1
+            else:
+                return self.curr_layout, valid_flip
+        elif (direction == 2):
+            #return if outside of board
+            if (len(self.curr_layout)-1 > row > 0):
+                row = row - 1
+            else:
+                return self.curr_layout, valid_flip
+            if (len(self.curr_layout[row])-1 > column > 0):
+                column = column + 1
+            else:
+                return self.curr_layout, valid_flip
+        elif (direction == 3):
+            #return if outside of board
+            if (len(self.curr_layout)-1 > row > 0):
+                row = row + 1
+            else:
+                return self.curr_layout, valid_flip
+            if (len(self.curr_layout[row])-1 > column > 0):
+                column = column - 1
+            else:
+                return self.curr_layout, valid_flip
+        elif (direction == 4):
+            #return if outside of board
+            if (len(self.curr_layout)-1 > row > 0):
+                row = row + 1
+            else:
+                return self.curr_layout, valid_flip
+            if (len(self.curr_layout[row])-1 > column > 0):
+                column = column + 1
+            else:
+                return self.curr_layout, valid_flip
+        #check if these are valid moves
+        #print("Row: " + str(row))
+        #print("Column: " + str(column))
+        if (self.curr_layout[row][column] == possible_move):
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == opponent):
+            opponent_prev = True
+            self.curr_layout, valid_flip = self.flipDiagonals(row, column, player, opponent, opponent_prev, direction)
+            if (valid_flip):
+                self.curr_layout[row][column] = player
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == player and opponent_prev):
+            valid_flip = True
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == player):
+            return self.curr_layout, valid_flip
+        elif (self.curr_layout[row][column] == empty_space):
+            return self.curr_layout, valid_flip
 

@@ -56,6 +56,7 @@ while (AI1.getPossibleMove() and AI2.getPossibleMove()):
             move = AI1.pick_next_move(current_layout)
             print(move)
             testBoard3.place_piece(move, current_turn)
+            testBoard3.flip_pieces(move)
         testBoard3.switchTurn()
         testBoard3.print_layout()
     else:
@@ -64,6 +65,7 @@ while (AI1.getPossibleMove() and AI2.getPossibleMove()):
             move = AI2.pick_next_move(current_layout)
             print(move)
             testBoard3.place_piece(move, current_turn)
+            testBoard3.flip_pieces(move)
         testBoard3.switchTurn()
         testBoard3.print_layout()
     #count = count + 1
