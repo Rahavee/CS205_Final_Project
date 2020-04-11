@@ -42,6 +42,8 @@ AI1 = opponent(True)
 AI2 = opponent(True)
 testBoard3.generate_legal_moves()
 while (AI1.getPossibleMove() and AI2.getPossibleMove()):
+#count = 0
+#while (count < 20):
     testBoard3.generate_legal_moves()
     print("initial")
     testBoard3.print_layout()
@@ -64,3 +66,4 @@ while (AI1.getPossibleMove() and AI2.getPossibleMove()):
             testBoard3.place_piece(move, current_turn)
         testBoard3.switchTurn()
         testBoard3.print_layout()
+    #count = count + 1
