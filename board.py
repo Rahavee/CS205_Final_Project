@@ -27,19 +27,22 @@ class Board:
 
     def place_piece(self, move, player):
         # If the move is valid, will add the move to the board
+        flag = False
         x,y = move
         if (self.check_valid_move(move)):
             self.curr_layout[x][y] = player
-
-        # Reaccumulate all pieces on the board
-        self.player1_pieces = 0
-        self.player2_pieces = 0
-        for row in self.curr_layout:
-            for number in row:
-                if (number == 1):
-                    self.player1_pieces += 1
-                elif (number == 2):
-                    self.player2_pieces += 1
+            flag = True
+            # Reaccumulate all pieces on the board
+            self.player1_pieces = 0
+            self.player2_pieces = 0
+            for row in self.curr_layout:
+                for number in row:
+                    if (number == 1):
+                        self.player1_pieces += 1
+                    elif (number == 2):
+                        self.player2_pieces += 1
+        print("in board, flag is " + str(flag))
+        return flag
 
     #def is_game_finished(self):
         #TODO check player 1 moves

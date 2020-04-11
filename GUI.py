@@ -27,12 +27,12 @@ def updateGameArray():
     global gameArray
     gameArray = game.get_current_layout()
     # TODO: get the updated array from the backend when undo-ing a move or to see computer's move
-    print(" Getting the array from the backend ")
+    #print(" Getting the array from the backend ")
 
 
 # function to send the array to the backend
 def getGameArray():
-    print(" sending the gameArray ")
+    #print(" sending the gameArray ")
     # TODO: Send the matrix to the backend
     return gameArray
 
@@ -109,13 +109,8 @@ def eventListener(position):
                 if tiles[t].isOver(position):
                     row = t // 8
                     column = t % 8
-                    # TODO: Send the row and column of where the user wants to place new tile and check if that is valid
-                    if game.place_piece((row, column), game.get_current_turn()):
-                        # TODO: Get who is playing from the backend and pick the color of tile accordingly
-                        gameArray[row][column] = game.get_current_turn()
-                    # TODO: Flip the pieces
-                    updateGameArray()
-                    # TODO: If playing against computer then call updateGameArray() here.
+                    # TODO: Get who is playing from the backend and pick the color of tile accordingly
+                    #updateGameArray()
             for c in range(len(bgOptions)):
                 if bgOptions[c].isOver(position):
                     background = bgOptions[c].color
@@ -153,20 +148,20 @@ def mainGameLoop():
         # Flip the display
         pygame.display.flip()
 
-        # TODO: A check to make sure the player still has playable moves. Boolean value maybe?
 
+        # Game operations
+        # TODO check end condition - both players have no legal moves
         game.generate_legal_moves()
-        game.print_layout()
 
         if(game.get_current_turn() == 1): # If player 1's turn
-            if(game.place_piece( (row, column), 1)):
+            if( game.place_piece( (row, column), 1) ):
+                print("legal move, switching turn")
                 game.switchTurn()
 
         else: # If player 2's turn
             move = ai.pick_next_move(game.get_current_layout())
-            if(game.place_piece_(move)): # Returns True if place_piece succeeds
+            if(game.place_piece(move, 2)): # Returns True if place_piece succeeds
                 game.switchTurn()
-
 
 
     # Done! Time to quit.
