@@ -6,27 +6,30 @@ class opponent():
         self.possibleMove = True
         
     def pick_next_move_easy(self, gameBoard):
-        currentLayout = gameBoard.get_current_layout()
+        currentLayout = gameBoard
         possibleMoveList = []
         possible_move = 3
         for row in range(len(currentLayout)):
             for piece in range(len(currentLayout)):
+                #print(currentLayout[row][piece])
                 if (currentLayout[row][piece] == possible_move):
                     columnIndex = piece
                     rowIndex = row
+                    #print("Row: " + str(rowIndex) + " Column: " + str(columnIndex))
                     possibleMoveList.append((rowIndex, columnIndex))
         if (len(possibleMoveList) > 0):
             move = random.choice(possibleMoveList)
-            gameBoard.place_piece(move[0],move[1],gameBoard.get_current_turn())
+            #print(move)
+            return move
     
     def pick_next_move_difficult(self, gameBoard):
         print("Hard move")
     
     def pick_next_move(self, gameBoard):
         if (self.easyDiff):
-            self.pick_next_move_easy(gameBoard)
+            return self.pick_next_move_easy(gameBoard)
         else:
-            self.pick_next_move_difficult(gameBoard)
+            return self.pick_next_move_difficult(gameBoard)
             
     def setPossibleMove(self, possible):
         self.possibleMove = possible

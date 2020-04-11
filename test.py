@@ -43,14 +43,24 @@ AI2 = opponent(True)
 testBoard3.generate_legal_moves()
 while (AI1.getPossibleMove() and AI2.getPossibleMove()):
     testBoard3.generate_legal_moves()
+    print("initial")
+    testBoard3.print_layout()
+    current_layout = testBoard3.get_current_layout()
+    current_turn = testBoard3.get_current_turn()
     print("current turn: " + str(testBoard3.get_current_turn()))
     if (testBoard3.get_current_turn() == 1):
         AI1.setPossibleMove(testBoard3.isPossibleMove())
-        AI1.pick_next_move(testBoard3)
+        if (testBoard3.isPossibleMove()):
+            move = AI1.pick_next_move(current_layout)
+            print(move)
+            testBoard3.place_piece(move, current_turn)
         testBoard3.switchTurn()
         testBoard3.print_layout()
     else:
-        AI1.setPossibleMove(testBoard3.isPossibleMove())
-        AI2.pick_next_move(testBoard3)
+        AI2.setPossibleMove(testBoard3.isPossibleMove())
+        if (testBoard3.isPossibleMove()):
+            move = AI2.pick_next_move(current_layout)
+            print(move)
+            testBoard3.place_piece(move, current_turn)
         testBoard3.switchTurn()
         testBoard3.print_layout()
