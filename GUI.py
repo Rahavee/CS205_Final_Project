@@ -148,21 +148,25 @@ def mainGameLoop():
         # Flip the display
         pygame.display.flip()
 
-
         # Game operations
         # TODO check end condition - both players have no legal moves
         game.generate_legal_moves()
 
-        if(game.get_current_turn() == 1): # If player 1's turn
+        # If player 1's turn and legal moves exist
+        if(game.get_current_turn() == 1 and game.isPossibleMove()):
             if( game.place_piece( (row, column), 1) ):
-                print("legal move, switching turn")
                 game.switchTurn()
 
-        else: # If player 2's turn
+        # If player 2's turn and legal moves exist
+        elif(game.get_current_turn() == 2 and ai.getPossibleMove()): # If player 2's turn
             move = ai.pick_next_move(game.get_current_layout())
             if(game.place_piece(move, 2)): # Returns True if place_piece succeeds
                 game.switchTurn()
 
+        # Neither player has legal moves, game is over
+        else:
+            #TODO GUI solution to this
+            print("game over")
 
     # Done! Time to quit.
     pygame.quit()
