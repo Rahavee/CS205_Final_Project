@@ -41,12 +41,7 @@ class Board:
                         self.player1_pieces += 1
                     elif (number == 2):
                         self.player2_pieces += 1
-        print("in board, flag is " + str(flag))
         return flag
-
-    #def is_game_finished(self):
-        #TODO check player 1 moves
-        #TODO check player 2 moves
 
     def print_layout(self):
         print("===================")
@@ -84,7 +79,6 @@ class Board:
     def isPossibleMove(self):
         for rowIndex in range(len(self.curr_layout)):
             for columnIndex in range(len(self.curr_layout[rowIndex])):
-                #print(self.curr_layout[rowIndex][columnIndex])
                 if (self.curr_layout[rowIndex][columnIndex] == 3):
                     return True
                     #print("game still happening")

@@ -2,6 +2,7 @@ import pygame
 from Button import Button
 from board import Board
 from AI import opponent
+import time
 
 # global variables
 game = Board(1, 1, 1)
@@ -155,12 +156,15 @@ def mainGameLoop():
         # If player 1's turn and legal moves exist
         if(game.get_current_turn() == 1 and game.isPossibleMove()):
             if( game.place_piece( (row, column), 1) ):
+                game.flip_pieces((row, column))
                 game.switchTurn()
 
         # If player 2's turn and legal moves exist
         elif(game.get_current_turn() == 2 and ai.getPossibleMove()): # If player 2's turn
             move = ai.pick_next_move(game.get_current_layout())
+            time.sleep(1)
             if(game.place_piece(move, 2)): # Returns True if place_piece succeeds
+                game.flip_pieces(move)
                 game.switchTurn()
 
         # Neither player has legal moves, game is over
