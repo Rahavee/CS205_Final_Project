@@ -84,8 +84,25 @@ class Board:
                     #print("game still happening")
         #print("game over")
         return False
-        
-    
+
+    def determineWinner(self):
+        num_one = 0
+        num_two = 0
+        winner = 0
+        for row in range(len(self.curr_layout)):
+            for piece in range(len(self.curr_layout)):
+                if piece == 1:
+                    num_one += 1
+                elif piece == 2:
+                    num_two += 1
+        if num_one > num_two:
+            winner = 1
+        elif num_one < num_two:
+            winner = 2
+        else:
+            winner = 3
+        return winner
+
     def generate_legal_moves(self):
         possible_move = 3
         direction = 0

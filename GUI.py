@@ -76,7 +76,6 @@ def drawBoard(screen):
         xCir = 65
         yCir = yCir + square + 1
 
-
 # buttons for changing the background color
 def changeBackground(screen):
     global bgOptions
@@ -86,6 +85,13 @@ def changeBackground(screen):
     bgOptions.append(Button(screen, blue, 840, 400, 30, 30))
     bgOptions.append(Button(screen, purple, 880, 400, 30, 30))
     bgOptions.append(Button(screen, green, 920, 400, 30, 30))
+
+def displayEndButtons(screen):
+    global endButtons
+    endButtons = []
+    endButtons.append(Button(screen, (210, 210, 210), 600, 200, 100, 100, "Play again?"))
+    endButtons.append(Button(screen, (210, 210, 210), 800, 600, 100, 100, "Yes"))
+    endButtons.append(Button(screen, (210, 210, 210), 400, 600, 100, 100, "No"))
 
 
 def displayOtherButtons(screen):
@@ -123,7 +129,14 @@ def eventListener(position):
                     else:
                         widthLine = 3
                         flag = True
+            try:
+                # TODO: Start New Game
+                #if endButtons[1].isOver(position):
 
+                if endButtons[2].isOver(position):
+                    running = False
+            except:
+                pass
 
 def mainGameLoop():
     pygame.init()
@@ -171,6 +184,12 @@ def mainGameLoop():
         else:
             #TODO GUI solution to this
             print("game over")
+            screen.fill((255,255,255))
+            displayEndButtons(screen)
+            pygame.display.update()
+            position = pygame.mouse.get_pos()
+            eventListener(position)
+
 
     # Done! Time to quit.
     pygame.quit()
