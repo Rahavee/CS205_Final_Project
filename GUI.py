@@ -140,45 +140,52 @@ def eventListener(position):
 
 def mainGameLoop():
     pygame.init()
+    flagEnd = False
 
     # Set up the drawing window
     screen = pygame.display.set_mode([1200, 800])
 
     # Run until the user asks to quit
     while running:
-        # Fill the background with white
-        screen.fill((255, 255, 255))
+        if not flagEnd:
+            # Fill the background with white
+            screen.fill((255, 255, 255))
 
-        # Draw the screen elements
-        drawBoard(screen)
-        displayOtherButtons(screen)
-        changeBackground(screen)
-        pygame.display.update()
+            # Draw the screen elements
+            drawBoard(screen)
+            displayOtherButtons(screen)
+            changeBackground(screen)
+            pygame.display.update()
 
-        # get the mouse position and check whether there was a click
-        position = pygame.mouse.get_pos()
-        eventListener(position)
+            # get the mouse position and check whether there was a click
+            position = pygame.mouse.get_pos()
+            eventListener(position)
 
-        # Flip the display
-        pygame.display.flip()
+            # Flip the display
+            pygame.display.flip()
 
-        # Game operations
-        # TODO check end condition - both players have no legal moves
-        game.generate_legal_moves()
+            # Game operations
+            # TODO check end condition - both players have no legal moves
+            game.generate_legal_moves()
 
-        # If player 1's turn and legal moves exist
-        if(game.get_current_turn() == 1 and game.isPossibleMove()):
-            if( game.place_piece( (row, column), 1) ):
-                game.flip_pieces((row, column))
-                game.switchTurn()
+            # If player 1's turn and legal moves exist
+            if(game.get_current_turn() == 1 and game.isPossibleMove()):
+                if( game.place_piece( (row, column), 1) ):
+                    game.flip_pieces((row, column))
+                    game.switchTurn()
 
-        # If player 2's turn and legal moves exist
-        elif(game.get_current_turn() == 2 and ai.getPossibleMove()): # If player 2's turn
-            move = ai.pick_next_move(game.get_current_layout())
-            time.sleep(1)
-            if(game.place_piece(move, 2)): # Returns True if place_piece succeeds
-                game.flip_pieces(move)
-                game.switchTurn()
+
+            # If player 2's turn and legal moves exist
+            elif(game.get_current_turn() == 2 and ai.getPossibleMove()): # If player 2's turn
+                move = ai.pick_next_move(game.get_current_layout())
+                time.sleep(1)
+                if(game.place_piece(move, 2)): # Returns True if place_piece succeeds
+                    game.flip_pieces(move)
+                    game.switchTurn()
+
+            else:
+                flagEnd = True
+
 
         # Neither player has legal moves, game is over
         else:
