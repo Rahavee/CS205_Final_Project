@@ -46,7 +46,7 @@ def drawBoard(screen):
     # To draw the grid squares
     x = 20
     y = 50
-    square = 90
+    square = 80
     for i in range(0, 8):
         for j in range(0, 8):
             if gameArray[i][j] == 3:
@@ -62,9 +62,9 @@ def drawBoard(screen):
         y = y + square + 1
 
     # drawing the playing pieces
-    radius = 35
-    xCir = 65
-    yCir = 95
+    radius = 30
+    xCir = 60
+    yCir = 90
     for i in range(len(gameArray)):
         for j in range(len(gameArray[i])):
             if gameArray[i][j] == 1:
@@ -73,7 +73,7 @@ def drawBoard(screen):
                 pygame.draw.circle(screen, (0, 0, 0), (xCir, yCir), radius)
 
             xCir = xCir + square + 1
-        xCir = 65
+        xCir = 60
         yCir = yCir + square + 1
 
 
@@ -150,7 +150,7 @@ def mainGameLoop():
     flagEnd = False
 
     # Set up the drawing window
-    screen = pygame.display.set_mode([1200, 800])
+    screen = pygame.display.set_mode([1200, 700])
 
     # Run until the user asks to quit
     while running:
@@ -213,7 +213,7 @@ def helpScreen():
 
     # Set up the drawing window
     global help
-    help = pygame.display.set_mode([1200, 800])
+    help = pygame.display.set_mode([1200, 700])
 
     # Run until the user asks to quit
     run = True
