@@ -10,7 +10,9 @@ ai = opponent(True)
 tiles = []
 otherButtons = []
 bgOptions = []
+endButtons = []
 running = True
+run = True
 gameArray = []
 green = (34, 139, 34)
 blue = (34, 34, 139)
@@ -91,10 +93,16 @@ def changeBackground(screen):
 def displayEndButtons(screen):
     global endButtons
     endButtons = []
-    endButtons.append(Button(screen, (210, 210, 210), 600, 200, 100, 100, "Play again?"))
-    endButtons.append(Button(screen, (210, 210, 210), 800, 600, 100, 100, "Yes"))
-    endButtons.append(Button(screen, (210, 210, 210), 400, 600, 100, 100, "No"))
+    endButtons.append(Button(screen, (255, 255, 255), 600, 300, 100, 100, "Play again?"))
+    endButtons.append(Button(screen, (210, 210, 210), 800, 500, 100, 100, "Yes"))
+    endButtons.append(Button(screen, (210, 210, 210), 400, 500, 100, 100, "No"))
 
+    if game.determineWinner() == 1:
+        endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "Player 1 Wins!"))
+    elif game.determineWinner() == 2:
+        endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "Player 2 Wins"))
+    elif game.determineWinner() == 3:
+        endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "It's a tie!"))
 
 def displayOtherButtons(screen):
     global otherButtons
@@ -109,11 +117,12 @@ def getNextMove():
 
 
 def eventListener(position):
-    global running, gameArray, background, widthLine, flag, row, column
+    global running, gameArray, background, widthLine, flag, row, column, run
     for event in pygame.event.get():
         # Did the user click the window close button?
         if event.type == pygame.QUIT:
             running = False
+            run = False
         # Did the user click?
         if event.type == pygame.MOUSEBUTTONDOWN:
             for t in range(len(tiles)):
@@ -135,14 +144,15 @@ def eventListener(position):
                     flag = True
             if otherButtons[1].isOver(position):
                 helpScreen()
-            # try:
-            #     # TODO: Start New Game
-            #     # if endButtons[1].isOver(position):
-            #
-            #     if endButtons[2].isOver(position):
-            #         running = False
-            # except:
-            #     pass
+            try:
+                if endButtons[1].isOver(position):
+                    #TODO: Reset board
+                    mainGameLoop()
+                if endButtons[2].isOver(position):
+                    running = False
+                    run = False
+            except:
+                pass
 
 
 def mainGameLoop():
@@ -153,6 +163,7 @@ def mainGameLoop():
     screen = pygame.display.set_mode([1200, 800])
 
     # Run until the user asks to quit
+
     while running:
         if not flagEnd:
             # Fill the background with white
@@ -197,16 +208,24 @@ def mainGameLoop():
         # Neither player has legal moves, game is over
         else:
             # TODO GUI solution to this
-            print("game over")
-            screen.fill((255, 255, 255))
-            displayEndButtons(screen)
-            pygame.display.update()
-            position = pygame.mouse.get_pos()
-            eventListener(position)
+            endScreen()
 
     # Done! Time to quit.
     pygame.quit()
 
+def endScreen():
+    pygame.init()
+
+    global end
+    end = pygame.display.set_mode([1200,800])
+
+    while run:
+
+        end.fill((255,255,255))
+        displayEndButtons(end)
+        pygame.display.update()
+        position = pygame.mouse.get_pos()
+        eventListener(position)
 
 def helpScreen():
     pygame.init()
