@@ -26,6 +26,17 @@ class Board:
 
         self.game_over = False
 
+    def reset(self):
+        self.curr_layout = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]]
+
     def place_piece(self, move, player):
         # If the move is valid, will add the move to the board
         flag = False
@@ -86,16 +97,20 @@ class Board:
         # print("game over")
         return False
 
-    def determineWinner(self):
-        num_one = 0
-        num_two = 0
-        winner = 0
+    def numberOfTiles(self, player):
+        total = 0
         for row in range(len(self.curr_layout)):
-            for piece in range(len(self.curr_layout)):
-                if piece == 1:
-                    num_one += 1
-                elif piece == 2:
-                    num_two += 1
+            for piece in range(len(self.curr_layout[row])):
+                if self.curr_layout[row][piece] == player:
+                    total += 1
+
+        return total
+
+    def determineWinner(self):
+        winner = 0
+        num_one = self.numberOfTiles(1)
+        num_two = self.numberOfTiles(2)
+
         if num_one > num_two:
             winner = 1
         elif num_one < num_two:

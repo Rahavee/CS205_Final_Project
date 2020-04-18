@@ -107,9 +107,14 @@ def displayEndButtons(screen):
 def displayOtherButtons(screen):
     global otherButtons
     otherButtons = []
-    otherButtons.append(Button(screen, (210, 210, 210), 900, 100, 100, 100, "Show moves"))
-    otherButtons.append(Button(screen, (210, 210, 210), 900, 200, 100, 100, "Help"))
-
+    otherButtons.append(Button(screen, (210, 210, 210), 950, 100, 100, 100, "Show moves"))
+    otherButtons.append(Button(screen, (210, 210, 210), 950, 200, 100, 100, "Help"))
+    otherButtons.append(Button(screen, (210, 210, 210), 750, 100, 100, 100, "Fullscreen"))
+    otherButtons.append(Button(screen, (210, 210, 210), 750, 200, 100, 100, "Default Screen Size"))
+    player1Tiles = "Player 1 tiles = " + str(game.numberOfTiles(1))
+    player2Tiles = "Player 2 tiles = " + str(game.numberOfTiles(2))
+    otherButtons.append(Button(screen, (255, 255, 255), 900, 500, 100, 100, player1Tiles))
+    otherButtons.append(Button(screen, (255, 255, 255), 900, 600, 100, 100, player2Tiles))
 
 # Returns the players moves
 def getNextMove():
@@ -146,7 +151,7 @@ def eventListener(position):
                 helpScreen()
             try:
                 if endButtons[1].isOver(position):
-                    #TODO: Reset board
+                    game.reset()
                     mainGameLoop()
                 if endButtons[2].isOver(position):
                     running = False
