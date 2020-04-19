@@ -3,6 +3,7 @@ from Button import Button
 from board import Board
 from AI import opponent
 import time
+import banner
 
 # global variables
 game = Board(1, 1, 1)
@@ -13,6 +14,7 @@ bgOptions = []
 endButtons = []
 running = True
 run = True
+start = True
 gameArray = []
 green = (34, 139, 34)
 blue = (34, 34, 139)
@@ -23,6 +25,19 @@ widthLine = 0
 flag = False
 row = 0
 column = 0
+difficulty = 0
+players = 1
+
+
+# function to get the difficulty chosen. Returns 0 for easy and 1 for difficult
+
+def getDifficulty():
+    return difficulty
+
+
+# function to get number of players. Returns 1 and 2
+def getNumberOfPlayers():
+    return players
 
 
 # function to get the array from the backend
@@ -104,6 +119,7 @@ def displayEndButtons(screen):
     elif game.determineWinner() == 3:
         endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "It's a tie!"))
 
+
 def displayOtherButtons(screen):
     global otherButtons
     otherButtons = []
@@ -115,6 +131,7 @@ def displayOtherButtons(screen):
     player2Tiles = "Player 2 tiles = " + str(game.numberOfTiles(2))
     otherButtons.append(Button(screen, (255, 255, 255), 900, 500, 100, 100, player1Tiles))
     otherButtons.append(Button(screen, (255, 255, 255), 900, 600, 100, 100, player2Tiles))
+
 
 # Returns the players moves
 def getNextMove():
@@ -170,73 +187,124 @@ def mainGameLoop():
     # Run until the user asks to quit
 
     while running:
-        if not flagEnd:
-            # Fill the background with white
-            screen.fill((255, 255, 255))
-
-            # Draw the screen elements
-            drawBoard(screen)
-            displayOtherButtons(screen)
-            changeBackground(screen)
-            pygame.display.update()
-
-            # get the mouse position and check whether there was a click
-            position = pygame.mouse.get_pos()
-            eventListener(position)
-
-            # Flip the display
-            pygame.display.flip()
-
-            # Game operations
-            # TODO check end condition - both players have no legal moves
-            game.generate_legal_moves()
-
-            # If player 1's turn and legal moves exist
-            if (game.get_current_turn() == 1 and game.isPossibleMove()):
-                if (game.place_piece((row, column), 1)):
-                    game.flip_pieces((row, column))
-                    game.switchTurn()
-
-
-            # If player 2's turn and legal moves exist
-            elif (game.get_current_turn() == 2 and ai.getPossibleMove()):  # If player 2's turn
-                move = ai.pick_next_move(game.get_current_layout())
-                time.sleep(1)
-                if (game.place_piece(move, 2)):  # Returns True if place_piece succeeds
-                    game.flip_pieces(move)
-                    game.switchTurn()
-
-            else:
-                flagEnd = True
-
-
-        # Neither player has legal moves, game is over
+        # Fill the background with white
+        screen.fill((255, 255, 255))
+        if start:
+            startScreen(screen)
         else:
-            # TODO GUI solution to this
-            endScreen()
+            if not flagEnd:
+                print(difficulty,players)
+
+                # Draw the screen elements
+                drawBoard(screen)
+                displayOtherButtons(screen)
+                changeBackground(screen)
+                pygame.display.update()
+
+                # get the mouse position and check whether there was a click
+                position = pygame.mouse.get_pos()
+                eventListener(position)
+
+                # Game operations
+                # TODO check end condition - both players have no legal moves
+                game.generate_legal_moves()
+
+                # If player 1's turn and legal moves exist
+                if (game.get_current_turn() == 1 and game.isPossibleMove()):
+                    if (game.place_piece((row, column), 1)):
+                        game.flip_pieces((row, column))
+                        game.switchTurn()
+
+
+                # If player 2's turn and legal moves exist
+                elif (game.get_current_turn() == 2 and ai.getPossibleMove()):  # If player 2's turn
+                    move = ai.pick_next_move(game.get_current_layout())
+                    time.sleep(1)
+                    if (game.place_piece(move, 2)):  # Returns True if place_piece succeeds
+                        game.flip_pieces(move)
+                        game.switchTurn()
+
+                else:
+                    flagEnd = True
+
+
+            # Neither player has legal moves, game is over
+            else:
+                # TODO GUI solution to this
+                endScreen()
+        # Flip the display
+        pygame.display.flip()
 
     # Done! Time to quit.
     pygame.quit()
+
+
+def startScreen(screen):
+    global difficulty, players, start, running
+    font = pygame.font.SysFont('comicsans', 30)
+    myRect = pygame.Rect((20, 20, 800, 800))
+    text = renderText(banner.banner, font, myRect, (0, 0, 0), (255, 255, 255), 0)
+
+    if text:
+        screen.blit(text, myRect.topleft)
+    diff = []
+    people = []
+    Button(screen, (255, 255, 255), 200, 300, 100, 100, "Difficulty")
+    diff.append(Button(screen, (210, 210, 210), 100, 400, 100, 100, "Easy"))
+    diff.append(Button(screen, (210, 210, 210), 300, 400, 100, 100, "Difficult"))
+
+    Button(screen, (255, 255, 255), 900, 300, 100, 100, "Players")
+    people.append(Button(screen, (210, 210, 210), 800, 400, 100, 100, "1"))
+    people.append(Button(screen, (210, 210, 210), 1000, 400, 100, 100, "2"))
+    close = Button(screen,(210,210,210), 500, 600, 100, 100, "Game")
+
+    position = pygame.mouse.get_pos()
+
+
+    for event in pygame.event.get():
+        # Did the user click the window close button?
+        if event.type == pygame.QUIT:
+            running = False
+
+        # Did the user click?
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if diff[0].isOver(position):
+                difficulty = 0
+
+            if diff[1].isOver(position):
+                difficulty = 1
+
+            if people[0].isOver(position):
+                players = 1
+
+            if people[1].isOver(position):
+                players = 2
+            if close.isOver(position):
+                start=False
+
+
+
+    pygame.display.update()
+
 
 def endScreen():
     pygame.init()
 
     global end
-    end = pygame.display.set_mode([1200,800])
+    end = pygame.display.set_mode([1200, 800])
 
     while run:
-
-        end.fill((255,255,255))
+        end.fill((255, 255, 255))
         displayEndButtons(end)
         pygame.display.update()
         position = pygame.mouse.get_pos()
         eventListener(position)
 
+
 def helpScreen():
     pygame.init()
 
     # Set up the drawing window
-    global help
     help = pygame.display.set_mode([1200, 700])
 
     # Run until the user asks to quit
@@ -263,7 +331,6 @@ def helpScreen():
                 "legal moves on the game board.\nGame Finish:\nThe Game is finished when neither player has a legal " \
                 "move, or one of the players resigns. The winner of the game is the player with the most pieces on " \
                 "the board, unless a player resigned. The player that resigns loses the game "
-
 
         myRect = pygame.Rect((20, 20, 800, 800))
 
