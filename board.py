@@ -40,6 +40,7 @@ class Board:
     def place_piece(self, move, player):
         # If the move is valid, will add the move to the board
         flag = False
+        print(move)
         x, y = move
         if (self.check_valid_move(move)):
             self.curr_layout[x][y] = player
@@ -316,13 +317,13 @@ class Board:
             self.curr_layout, valid_flip = self.flipRow(row, column, player, opponent, opponent_prev, 2)
         elif (direction == 1):
             # return if outside of board
-            if (len(self.curr_layout[row]) - 1 > column > 0):
+            if (len(self.curr_layout[row]) > column > 0):
                 column = column - 1
             else:
                 return self.curr_layout, valid_flip
         elif (direction == 2):
             # return if outside of board
-            if (len(self.curr_layout[row]) - 1 > column > 0):
+            if (len(self.curr_layout[row]) - 1 > column >= 0):
                 column = column + 1
             else:
                 return self.curr_layout, valid_flip
@@ -355,14 +356,14 @@ class Board:
             self.curr_layout, valid_flip = self.flipColumn(row, column, player, opponent, opponent_prev, 2)
         elif (direction == 1):
             # return if outside of board
-            if (len(self.curr_layout) - 1 > row > 0):
+            if (len(self.curr_layout) > row > 0):
                 row = row - 1
             else:
                 return self.curr_layout, valid_flip
         elif (direction == 2):
             # return if outside of board
             # print(len(self.curr_layout))
-            if (len(self.curr_layout) - 1 > row > 0):
+            if (len(self.curr_layout) - 1 > row >= 0):
                 row = row + 1
             else:
                 return self.curr_layout, valid_flip
@@ -397,41 +398,41 @@ class Board:
             self.curr_layout, valid_flip = self.flipDiagonals(row, column, player, opponent, opponent_prev, 4)
         elif (direction == 1):
             # return if outside of board
-            if (len(self.curr_layout) - 1 > row > 0):
+            if (len(self.curr_layout) > row > 0):
                 row = row - 1
             else:
                 return self.curr_layout, valid_flip
-            if (len(self.curr_layout[row]) - 1 > column > 0):
+            if (len(self.curr_layout[row]) > column > 0):
                 column = column - 1
             else:
                 return self.curr_layout, valid_flip
         elif (direction == 2):
             # return if outside of board
-            if (len(self.curr_layout) - 1 > row > 0):
+            if (len(self.curr_layout) > row > 0):
                 row = row - 1
             else:
                 return self.curr_layout, valid_flip
-            if (len(self.curr_layout[row]) - 1 > column > 0):
+            if (len(self.curr_layout[row]) - 1 > column >= 0):
                 column = column + 1
             else:
                 return self.curr_layout, valid_flip
         elif (direction == 3):
             # return if outside of board
-            if (len(self.curr_layout) - 1 > row > 0):
+            if (len(self.curr_layout) - 1 > row >= 0):
                 row = row + 1
             else:
                 return self.curr_layout, valid_flip
-            if (len(self.curr_layout[row]) - 1 > column > 0):
+            if (len(self.curr_layout[row]) > column > 0):
                 column = column - 1
             else:
                 return self.curr_layout, valid_flip
         elif (direction == 4):
             # return if outside of board
-            if (len(self.curr_layout) - 1 > row > 0):
+            if (len(self.curr_layout) - 1 > row >= 0):
                 row = row + 1
             else:
                 return self.curr_layout, valid_flip
-            if (len(self.curr_layout[row]) - 1 > column > 0):
+            if (len(self.curr_layout[row]) - 1 > column >= 0):
                 column = column + 1
             else:
                 return self.curr_layout, valid_flip
