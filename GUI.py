@@ -3,7 +3,6 @@ from Button import Button
 from board import Board
 from AI import opponent
 import time
-import banner
 
 # global variables
 game = Board(1, 1, 1)
@@ -193,7 +192,7 @@ def mainGameLoop():
             startScreen(screen)
         else:
             if not flagEnd:
-                print(difficulty,players)
+                print(difficulty, players)
 
                 # Draw the screen elements
                 drawBoard(screen)
@@ -241,12 +240,8 @@ def mainGameLoop():
 
 def startScreen(screen):
     global difficulty, players, start, running
-    font = pygame.font.SysFont('comicsans', 30)
-    myRect = pygame.Rect((20, 20, 800, 800))
-    text = renderText(banner.banner, font, myRect, (0, 0, 0), (255, 255, 255), 0)
-
-    if text:
-        screen.blit(text, myRect.topleft)
+    banner = pygame.image.load("gameBanner.jpg")
+    screen.blit(banner, (10, 10))
     diff = []
     people = []
     Button(screen, (255, 255, 255), 200, 300, 100, 100, "Difficulty")
@@ -256,10 +251,9 @@ def startScreen(screen):
     Button(screen, (255, 255, 255), 900, 300, 100, 100, "Players")
     people.append(Button(screen, (210, 210, 210), 800, 400, 100, 100, "1"))
     people.append(Button(screen, (210, 210, 210), 1000, 400, 100, 100, "2"))
-    close = Button(screen,(210,210,210), 500, 600, 100, 100, "Game")
+    close = Button(screen, (210, 210, 210), 500, 600, 100, 100, "Game")
 
     position = pygame.mouse.get_pos()
-
 
     for event in pygame.event.get():
         # Did the user click the window close button?
@@ -280,9 +274,7 @@ def startScreen(screen):
             if people[1].isOver(position):
                 players = 2
             if close.isOver(position):
-                start=False
-
-
+                start = False
 
     pygame.display.update()
 
@@ -321,23 +313,29 @@ def helpScreen():
 
         # Write out the text
         font = pygame.font.SysFont('comicsans', 30)
-        rules = "Reversi Rules\nGame setup:\nThe game is played on an 8x8 grid. There are two color pieces (black or " \
+        rules = "Othello Rules\nGame setup:\nThe game is played on an 8x8 grid. There are two color pieces (black or " \
                 "white) to designate either player 1 or player 2. The two players that are trying to claim as much of " \
                 "the board as possible with their designated pieces.\nGame Start:\nTo start the game place 4 pieces " \
-                "in a diagonal pattern as seen in the photo below\n_Add_Photo_Of_Game_Start_\nGame Capture:\n	In " \
-                "order to capture the opponents pieces it must be between your most recent placed piece and a " \
-                "previously placed piece of the same color. The capture can occur horizontally, vertically, " \
-                "and diagonally. If you are confused as to what a legal move is turn on the feature that shows all " \
-                "legal moves on the game board.\nGame Finish:\nThe Game is finished when neither player has a legal " \
-                "move, or one of the players resigns. The winner of the game is the player with the most pieces on " \
-                "the board, unless a player resigned. The player that resigns loses the game "
+                "in a diagonal pattern as seen in the photo below\n"
+        picture = pygame.image.load("startBoard.gif")
+        help.blit(picture, (30, 190))
+        rules2 = "Game Capture:\nIn " \
+                 "order to capture the opponents pieces it must be between your most recent placed piece and a " \
+                 "previously placed piece of the same color. The capture can occur horizontally, vertically, " \
+                 "and diagonally. If you are confused as to what a legal move is turn on the feature that shows all " \
+                 "legal moves on the game board.\nGame Finish:\nThe Game is finished when neither player has a legal " \
+                 "move, or one of the players resigns. The winner of the game is the player with the most pieces on " \
+                 "the board, unless a player resigned. The player that resigns loses the game "
 
-        myRect = pygame.Rect((20, 20, 800, 800))
+        myRect = pygame.Rect((20, 20, 1000, 160))
+        myRect2 = pygame.Rect((20, 20, 1000, 400))
 
         text = renderText(rules, font, myRect, (0, 0, 0), (255, 255, 255), 0)
+        text2 = renderText(rules2, font, myRect2, (0, 0, 0), (255, 255, 255), 0)
 
         if text:
             help.blit(text, myRect.topleft)
+            help.blit(text2,myRect2.bottomleft)
 
         pygame.display.update()
 
