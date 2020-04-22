@@ -6,6 +6,13 @@ import time
 
 # global variables
 game = Board(1, 1, 1)
+defaultX = 1200
+defaultY = 700
+defaultScreenSize = [defaultX, defaultY]
+fullScreenSize = [0,0] #set on openning of program
+screenSize = defaultScreenSize
+whatSize = 0 # 0 is default, 1 is fullscreen
+alreadyFullScreen = False
 ai = opponent(True)
 tiles = []
 otherButtons = []
@@ -43,14 +50,12 @@ def getNumberOfPlayers():
 def updateGameArray():
     global gameArray
     gameArray = game.get_current_layout()
-    # TODO: get the updated array from the backend when undo-ing a move or to see computer's move
     # print(" Getting the array from the backend ")
 
 
 # function to send the array to the backend
 def getGameArray():
     # print(" sending the gameArray ")
-    # TODO: Send the matrix to the backend
     return gameArray
 
 
@@ -138,19 +143,21 @@ def getNextMove():
 
 
 def eventListener(position):
-    global running, gameArray, background, widthLine, flag, row, column, run
+    global running, gameArray, background, widthLine, flag, row, column, run, screenSize, whatSize, alreadyFullScreen
     for event in pygame.event.get():
         # Did the user click the window close button?
         if event.type == pygame.QUIT:
             running = False
             run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
         # Did the user click?
         if event.type == pygame.MOUSEBUTTONDOWN:
             for t in range(len(tiles)):
                 if tiles[t].isOver(position):
                     row = t // 8
                     column = t % 8
-                    # TODO: Get who is playing from the backend and pick the color of tile accordingly
                     # updateGameArray()
             for c in range(len(bgOptions)):
                 if bgOptions[c].isOver(position):
@@ -165,6 +172,14 @@ def eventListener(position):
                     flag = True
             if otherButtons[1].isOver(position):
                 helpScreen()
+            if otherButtons[2].isOver(position):
+                screenSize = fullScreenSize
+                whatSize = 1
+            if otherButtons[3].isOver(position):
+                screenSize = defaultScreenSize
+                whatSize = 0
+                alreadyFullScreen = False
+
             try:
                 if endButtons[1].isOver(position):
                     game.reset()
@@ -177,17 +192,30 @@ def eventListener(position):
 
 
 def mainGameLoop():
+    global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running
     pygame.init()
     flagEnd = False
 
+    infoObject = pygame.display.Info()
+    fullScreenSize = [infoObject.current_w, infoObject.current_h]
     # Set up the drawing window
-    screen = pygame.display.set_mode([1200, 700])
-
+    if whatSize == 0:
+        screen = pygame.display.set_mode(screenSize)
+    else:
+        screen = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
     # Run until the user asks to quit
 
     while running:
+        if whatSize == 0:
+            screen = pygame.display.set_mode(screenSize)
+        else:
+            if alreadyFullScreen == False:
+                alreadyFullScreen = True
+                screen = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+
         # Fill the background with white
         screen.fill((255, 255, 255))
+
         if start:
             startScreen(screen)
         else:
@@ -205,7 +233,6 @@ def mainGameLoop():
                 eventListener(position)
 
                 # Game operations
-                # TODO check end condition - both players have no legal moves
                 game.generate_legal_moves()
 
                 # If player 1's turn and legal moves exist
@@ -229,7 +256,6 @@ def mainGameLoop():
 
             # Neither player has legal moves, game is over
             else:
-                # TODO GUI solution to this
                 endScreen()
         # Flip the display
         pygame.display.flip()
@@ -259,6 +285,9 @@ def startScreen(screen):
         # Did the user click the window close button?
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
 
         # Did the user click?
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -280,13 +309,25 @@ def startScreen(screen):
 
 
 def endScreen():
+    global alreadyFullScreen
     pygame.init()
-
-    global end
-    end = pygame.display.set_mode([1200, 800])
-
+    if whatSize == 0:
+        end = pygame.display.set_mode(screenSize)
+        alreadyFullScreen = False
+    else:
+        end = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+        alreadyFullScreen = True
     while run:
-        end.fill((255, 255, 255))
+        if whatSize == 0:
+            end = pygame.display.set_mode(screenSize)
+        else:
+            if alreadyFullScreen == False:
+                alreadyFullScreen = True
+                end = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
         displayEndButtons(end)
         pygame.display.update()
         position = pygame.mouse.get_pos()
@@ -294,19 +335,32 @@ def endScreen():
 
 
 def helpScreen():
+    global alreadyFullScreen
     pygame.init()
 
     # Set up the drawing window
-    help = pygame.display.set_mode([1200, 700])
-
+    if whatSize == 0:
+        help = pygame.display.set_mode(screenSize)
+        alreadyFullScreen = False
+    else:
+        help = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+        alreadyFullScreen = True
     # Run until the user asks to quit
     run = True
     while run:
-
+        if whatSize == 0:
+            help = pygame.display.set_mode(screenSize)
+            alreadyFullScreen = False
+        else:
+            if alreadyFullScreen == False:
+                help = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
         # Did the user click the window close button?
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    run = False
 
         # Fill the background with white
         help.fill((255, 255, 255))
