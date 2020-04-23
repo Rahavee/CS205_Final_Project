@@ -40,7 +40,8 @@ class Board:
     def place_piece(self, move, player):
         # If the move is valid, will add the move to the board
         flag = False
-        print(move)
+        if (move == None):
+            return flag
         x, y = move
         if (self.check_valid_move(move)):
             self.curr_layout[x][y] = player
