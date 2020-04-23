@@ -11,6 +11,8 @@ class Button:
         self.width = width
         self.height = height
         self.label = label
+        pygame.init()
+        pygame.font.init()
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height), widthLine)
         if self.label != '':
             font = pygame.font.SysFont('comicsans', 30)
