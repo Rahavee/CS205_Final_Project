@@ -47,6 +47,11 @@ def getNumberOfPlayers():
     return players
 
 
+# function to get the turn order when playing against AI. Returns 1 for user playing first and 2 for user playing second
+def getTurnOrder():
+    return turnOrder
+
+
 # function to get the array from the backend
 def updateGameArray():
     global gameArray
