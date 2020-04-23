@@ -9,9 +9,9 @@ game = Board(1, 1, 1)
 defaultX = 1200
 defaultY = 700
 defaultScreenSize = [defaultX, defaultY]
-fullScreenSize = [0,0] #set on openning of program
+fullScreenSize = [0, 0]  # set on openning of program
 screenSize = defaultScreenSize
-whatSize = 0 # 0 is default, 1 is fullscreen
+whatSize = 0  # 0 is default, 1 is fullscreen
 alreadyFullScreen = False
 ai = opponent(True)
 tiles = []
@@ -33,6 +33,7 @@ row = 0
 column = 0
 difficulty = 0
 players = 1
+turnOrder = 1
 
 
 # function to get the difficulty chosen. Returns 0 for easy and 1 for difficult
@@ -202,7 +203,7 @@ def mainGameLoop():
     if whatSize == 0:
         screen = pygame.display.set_mode(screenSize)
     else:
-        screen = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+        screen = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
     # Run until the user asks to quit
 
     while running:
@@ -211,7 +212,7 @@ def mainGameLoop():
         else:
             if alreadyFullScreen == False:
                 alreadyFullScreen = True
-                screen = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+                screen = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
 
         # Fill the background with white
         screen.fill((255, 255, 255))
@@ -265,19 +266,24 @@ def mainGameLoop():
 
 
 def startScreen(screen):
-    global difficulty, players, start, running
+    global difficulty, players, start, running, turnOrder
     banner = pygame.image.load("gameBanner.jpg")
     screen.blit(banner, (10, 10))
     diff = []
     people = []
-    Button(screen, (255, 255, 255), 200, 300, 100, 100, "Difficulty")
-    diff.append(Button(screen, (210, 210, 210), 100, 400, 100, 100, "Easy"))
-    diff.append(Button(screen, (210, 210, 210), 300, 400, 100, 100, "Difficult"))
+    turn = []
+    Button(screen, (255, 255, 255), 200, 250, 100, 100, "Difficulty")
+    diff.append(Button(screen, (210, 210, 210), 100, 300, 100, 100, "Easy"))
+    diff.append(Button(screen, (210, 210, 210), 300, 300, 100, 100, "Difficult"))
 
-    Button(screen, (255, 255, 255), 900, 300, 100, 100, "Players")
-    people.append(Button(screen, (210, 210, 210), 800, 400, 100, 100, "1"))
-    people.append(Button(screen, (210, 210, 210), 1000, 400, 100, 100, "2"))
+    Button(screen, (255, 255, 255), 900, 200, 100, 100, "Players")
+    people.append(Button(screen, (210, 210, 210), 800, 300, 100, 100, "1"))
+    people.append(Button(screen, (210, 210, 210), 1000, 300, 100, 100, "2"))
     close = Button(screen, (210, 210, 210), 500, 600, 100, 100, "Game")
+
+    Button(screen, (255, 255, 255), 900, 400, 100, 100, "Turn Order")
+    turn.append(Button(screen, (210, 210, 210), 800, 500, 100, 100, "1st"))
+    turn.append(Button(screen, (210, 210, 210), 1000, 500, 100, 100, "2nd"))
 
     position = pygame.mouse.get_pos()
 
@@ -297,11 +303,10 @@ def startScreen(screen):
             if diff[1].isOver(position):
                 difficulty = 1
 
-            if people[0].isOver(position):
-                players = 1
-
             if people[1].isOver(position):
                 players = 2
+            if turn[1].isOver(position):
+                turnOrder = 2
             if close.isOver(position):
                 start = False
 
@@ -315,7 +320,7 @@ def endScreen():
         end = pygame.display.set_mode(screenSize)
         alreadyFullScreen = False
     else:
-        end = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+        end = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
         alreadyFullScreen = True
     while run:
         if whatSize == 0:
@@ -323,7 +328,7 @@ def endScreen():
         else:
             if alreadyFullScreen == False:
                 alreadyFullScreen = True
-                end = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+                end = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -343,7 +348,7 @@ def helpScreen():
         help = pygame.display.set_mode(screenSize)
         alreadyFullScreen = False
     else:
-        help = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+        help = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
         alreadyFullScreen = True
     # Run until the user asks to quit
     run = True
@@ -353,7 +358,7 @@ def helpScreen():
             alreadyFullScreen = False
         else:
             if alreadyFullScreen == False:
-                help = pygame.display.set_mode([0,0], pygame.FULLSCREEN)
+                help = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
         # Did the user click the window close button?
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -389,7 +394,7 @@ def helpScreen():
 
         if text:
             help.blit(text, myRect.topleft)
-            help.blit(text2,myRect2.bottomleft)
+            help.blit(text2, myRect2.bottomleft)
 
         pygame.display.update()
 
