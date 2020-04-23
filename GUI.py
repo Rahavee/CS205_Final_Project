@@ -330,6 +330,7 @@ def endScreen():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     run = False
+        end.fill((255,255,255))
         displayEndButtons(end)
         pygame.display.update()
         position = pygame.mouse.get_pos()
