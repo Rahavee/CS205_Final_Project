@@ -41,6 +41,7 @@ class Board:
         # If the move is valid, will add the move to the board
         flag = False
         if (move == None):
+            flag = True
             return flag
         x, y = move
         if (self.check_valid_move(move)):

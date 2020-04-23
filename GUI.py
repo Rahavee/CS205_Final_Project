@@ -257,7 +257,7 @@ def mainGameLoop():
                         game.switchTurn()
 
                 # Player 2's turn if AI and legal moves exist
-                elif (game.get_current_turn() == 2 and ai.getPossibleMove()):
+                elif (game.get_current_turn() == 2 and game.isPossibleMove()):
                     time.sleep(1)
                     move = ai.pick_next_move(game.get_current_layout())
                     if (game.place_piece(move, 2)):  # Returns True if place_piece succeeds
@@ -311,10 +311,12 @@ def startScreen(screen):
         # Did the user click?
         if event.type == pygame.MOUSEBUTTONDOWN:
             if diff[0].isOver(position):
-                difficulty = 0
+                difficulty = True
+                ai.setDifficulty(difficulty)
 
             if diff[1].isOver(position):
-                difficulty = 1
+                difficulty = False
+                ai.setDifficulty(difficulty)
 
             if people[1].isOver(position):
                 players = 2

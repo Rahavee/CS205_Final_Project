@@ -115,3 +115,6 @@ class opponent():
         
     def getPossibleMove(self):
         return self.possibleMove
+        
+    def setDifficulty(self, isEasy):
+        self.easyDiff = isEasy
