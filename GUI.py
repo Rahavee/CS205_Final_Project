@@ -137,6 +137,10 @@ def displayOtherButtons(screen):
     otherButtons.append(Button(screen, (210, 210, 210), 950, 200, 100, 100, "Help"))
     otherButtons.append(Button(screen, (210, 210, 210), 750, 100, 100, 100, "Fullscreen"))
     otherButtons.append(Button(screen, (210, 210, 210), 750, 200, 100, 100, "Default Screen Size"))
+    if(game.get_current_turn() == 1):
+        otherButtons.append(Button(screen, (255, 255, 255), 850, 1, 100, 100, "Player 1's Turn"))
+    else:
+        otherButtons.append(Button(screen, (255, 255, 255), 850, 1, 100, 100, "Player 2's Turn"))
     player1Tiles = "Player 1 tiles = " + str(game.numberOfTiles(1))
     player2Tiles = "Player 2 tiles = " + str(game.numberOfTiles(2))
     otherButtons.append(Button(screen, (255, 255, 255), 900, 500, 100, 100, player1Tiles))
