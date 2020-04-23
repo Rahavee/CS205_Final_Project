@@ -144,7 +144,7 @@ def getNextMove():
 
 
 def eventListener(position):
-    global running, gameArray, background, widthLine, flag, row, column, run, screenSize, whatSize, alreadyFullScreen
+    global running, gameArray, background, widthLine, flag, row, column, run, screenSize, whatSize, alreadyFullScreen, start
     for event in pygame.event.get():
         # Did the user click the window close button?
         if event.type == pygame.QUIT:
@@ -184,6 +184,7 @@ def eventListener(position):
             try:
                 if endButtons[1].isOver(position):
                     game.reset()
+                    start = True
                     mainGameLoop()
                 if endButtons[2].isOver(position):
                     running = False
@@ -316,6 +317,7 @@ def startScreen(screen):
 def endScreen():
     global alreadyFullScreen
     pygame.init()
+    run = True
     if whatSize == 0:
         end = pygame.display.set_mode(screenSize)
         alreadyFullScreen = False
