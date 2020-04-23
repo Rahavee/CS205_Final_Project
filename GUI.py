@@ -242,17 +242,24 @@ def mainGameLoop():
                 # Game operations
                 game.generate_legal_moves()
 
-                # If player 1's turn and legal moves exist
+                # Player 2's turn and legal moves exist
                 if (game.get_current_turn() == 1 and game.isPossibleMove()):
                     if (game.place_piece((row, column), 1)):
                         game.flip_pieces((row, column))
                         game.switchTurn()
 
+                # TODO currently assuming the AI player can only be player 2
+                # TODO cleanup with separate function call
+                # Player 2's turn if human and legal moves exist
+                elif (game.get_current_turn() == 2 and players == 2 and game.isPossibleMove()):
+                    if (game.place_piece((row, column), 2)):
+                        game.flip_pieces((row, column))
+                        game.switchTurn()
 
-                # If player 2's turn and legal moves exist
-                elif (game.get_current_turn() == 2 and ai.getPossibleMove()):  # If player 2's turn
-                    move = ai.pick_next_move(game.get_current_layout())
+                # Player 2's turn if AI and legal moves exist
+                elif (game.get_current_turn() == 2 and ai.getPossibleMove()):
                     time.sleep(1)
+                    move = ai.pick_next_move(game.get_current_layout())
                     if (game.place_piece(move, 2)):  # Returns True if place_piece succeeds
                         game.flip_pieces(move)
                         game.switchTurn()
