@@ -21,6 +21,7 @@ endButtons = []
 running = True
 run = True
 start = True
+flagEnd = False
 gameArray = []
 green = (34, 139, 34)
 blue = (34, 34, 139)
@@ -194,7 +195,7 @@ def eventListener(position):
                 if endButtons[1].isOver(position):
                     game.reset()
                     start = True
-                    mainGameLoop()
+                    flagEnd=False
                 if endButtons[2].isOver(position):
                     running = False
                     run = False
@@ -203,9 +204,9 @@ def eventListener(position):
 
 
 def mainGameLoop():
-    global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running
+    global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd
     pygame.init()
-    flagEnd = False
+
 
     infoObject = pygame.display.Info()
     fullScreenSize = [infoObject.current_w, infoObject.current_h]
@@ -274,7 +275,7 @@ def mainGameLoop():
 
             # Neither player has legal moves, game is over
             else:
-                endScreen()
+                endScreen(screen)
         # Flip the display
         pygame.display.flip()
 
@@ -332,32 +333,13 @@ def startScreen(screen):
     pygame.display.update()
 
 
-def endScreen():
-    global alreadyFullScreen
-    pygame.init()
-    run = True
-    if whatSize == 0:
-        end = pygame.display.set_mode(screenSize)
-        alreadyFullScreen = False
-    else:
-        end = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
-        alreadyFullScreen = True
-    while run:
-        if whatSize == 0:
-            end = pygame.display.set_mode(screenSize)
-        else:
-            if alreadyFullScreen == False:
-                alreadyFullScreen = True
-                end = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    run = False
-        end.fill((255,255,255))
-        displayEndButtons(end)
-        pygame.display.update()
-        position = pygame.mouse.get_pos()
-        eventListener(position)
+def endScreen(screen):
+
+    screen.fill((255,255,255))
+    displayEndButtons(screen)
+    pygame.display.update()
+    position = pygame.mouse.get_pos()
+    eventListener(position)
 
 
 def helpScreen():
