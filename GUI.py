@@ -146,6 +146,7 @@ def displayOtherButtons(screen):
     player2Tiles = "Player 2 tiles = " + str(game.numberOfTiles(2))
     otherButtons.append(Button(screen, (255, 255, 255), 900, 500, 100, 100, player1Tiles))
     otherButtons.append(Button(screen, (255, 255, 255), 900, 600, 100, 100, player2Tiles))
+    otherButtons.append(Button(screen, (210, 210, 255), 1000, 350, 100, 100, "undo"))
 
 
 # Returns the players moves
@@ -154,7 +155,7 @@ def getNextMove():
 
 
 def eventListener(position):
-    global running, gameArray, background, widthLine, flag, row, column, run, screenSize, whatSize, alreadyFullScreen, start
+    global running, flagEnd, gameArray, background, widthLine, flag, row, column, run, screenSize, whatSize, alreadyFullScreen, start
     for event in pygame.event.get():
         # Did the user click the window close button?
         if event.type == pygame.QUIT:
@@ -190,6 +191,9 @@ def eventListener(position):
                 screenSize = defaultScreenSize
                 whatSize = 0
                 alreadyFullScreen = False
+            if otherButtons[7].isOver(position):
+                somePlaceHolder= 42
+                #TODO Call undo function from the board class
 
             try:
                 if endButtons[1].isOver(position):
@@ -306,13 +310,6 @@ def startScreen(screen):
     position = pygame.mouse.get_pos()
 
     for event in pygame.event.get():
-        # Did the user click the window close button?
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                running = False
-
         # Did the user click?
         if event.type == pygame.MOUSEBUTTONDOWN:
             if diff[0].isOver(position):
