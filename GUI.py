@@ -38,6 +38,7 @@ turnOrder = 1
 player1 = 1  # Assumes human is player 1 to start
 player2 = 2  # Assumes AI is player 2 to start
 
+
 #############################################################
 # function to get the difficulty chosen. Returns 0 for easy #
 # and 1 for difficult                                       #
@@ -45,11 +46,13 @@ player2 = 2  # Assumes AI is player 2 to start
 def getDifficulty():
     return difficulty
 
+
 #############################################################
 # function to get number of players. Returns 1 and 2        #
 #############################################################
 def getNumberOfPlayers():
     return players
+
 
 #############################################################
 # function to get the turn order when playing against AI.   #
@@ -59,6 +62,7 @@ def getNumberOfPlayers():
 def getTurnOrder():
     return turnOrder
 
+
 #############################################################
 # function to get the array from the backend                #
 #############################################################
@@ -67,12 +71,14 @@ def updateGameArray():
     gameArray = game.get_current_layout()
     # print(" Getting the array from the backend ")
 
+
 #############################################################
 # function to send the array to the backend                 #
 #############################################################
 def getGameArray():
     # print(" sending the gameArray ")
     return gameArray
+
 
 #############################################################
 # function to draw the 8x8 board and the pieces             #
@@ -128,6 +134,7 @@ def changeBackground(screen):
     bgOptions.append(Button(screen, purple, 920, 470, 30, 30))
     bgOptions.append(Button(screen, green, 960, 470, 30, 30))
 
+
 #############################################################
 # Display the end game screen questions whether the user    #
 # would like to play again and indicates winner of the game #
@@ -145,6 +152,7 @@ def displayEndButtons(screen):
         endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "Player 2 Wins"))
     elif game.determineWinner() == 3:
         endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "It's a tie!"))
+
 
 #############################################################
 # Display the buttons located to the right of the game board#
@@ -173,6 +181,7 @@ def displayOtherButtons(screen):
 #############################################################
 def getNextMove():
     return row, column
+
 
 #############################################################
 # Function listens for button press for the game board      #
@@ -221,7 +230,6 @@ def eventListener(position):
                 whatSize = 0
                 alreadyFullScreen = False
             if otherButtons[7].isOver(position):
-                somePlaceHolder = 42
                 game.undo()
                 row = 0
                 column = 0
@@ -238,12 +246,13 @@ def eventListener(position):
             except:
                 pass
 
+
 #############################################################
 # Function where all setup game functions occur including   #
 # drawing the board, displaying other buttons, changing     #
 # the background colors
 def mainGameLoop():
-    global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd, player1, player2
+    global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd, player1, player2, endButtons
     pygame.init()
 
     infoObject = pygame.display.Info()
@@ -268,6 +277,7 @@ def mainGameLoop():
 
         if start:
             startScreen(screen)
+            endButtons = []
         else:
             if not flagEnd:
                 # print(difficulty, players)
@@ -311,6 +321,7 @@ def mainGameLoop():
     # Done! Time to quit.
     pygame.quit()
 
+
 #############################################################
 # Check if a valid move can be made, if it can be made then #
 # place the piece and flip all the appropriate pieces that  #
@@ -321,6 +332,7 @@ def do_human_move(player_number):
         game.flip_pieces((row, column))
         game.switchTurn()
         game.save_to_history()
+
 
 #############################################################
 # Perform the move of the AI player, then wait a second to  #
@@ -333,6 +345,7 @@ def do_ai_move(player_number):
         game.flip_pieces(move)
         game.switchTurn()
         game.save_to_history()
+
 
 #############################################################
 # Function displays all buttons and text located on the     #
