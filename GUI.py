@@ -5,7 +5,7 @@ from AI import opponent
 import time
 
 # global variables
-game = Board(1, 1, 1)
+game = Board(1)
 defaultX = 1200
 defaultY = 700
 defaultScreenSize = [defaultX, defaultY]
@@ -282,8 +282,6 @@ def mainGameLoop():
             endButtons = []
         else:
             if not flagEnd:
-                # print(difficulty, players)
-
                 # Draw the screen elements
                 drawBoard(screen)
                 displayOtherButtons(screen)
@@ -312,6 +310,7 @@ def mainGameLoop():
                         do_ai_move(2)
 
                 else:
+                    game.clear_history()
                     flagEnd = True
 
             # Neither player has legal moves, game is over

@@ -3,15 +3,9 @@ from AI import opponent
 
 
 class Board:
-    def __init__(self, num_humans, first_turn, difficulty):
+    def __init__(self, first_turn):
 
-        self.num_humans = num_humans
         self.curr_turn = first_turn
-        self.difficulty = difficulty
-
-        self.player1_pieces = 2
-
-        self.player2_pieces = 2
 
         self.curr_layout = [
             [0, 0, 0, 0, 0, 0, 0, 0],
@@ -22,10 +16,12 @@ class Board:
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]]
-        self.game_over = False
 
         self.game_history = [(copy.deepcopy(self.curr_layout),self.curr_turn)]
 
+    #############################################################
+    # Return the game board to the initial state                #
+    #############################################################
     def reset(self):
         self.curr_layout = [
             [0, 0, 0, 0, 0, 0, 0, 0],
@@ -37,6 +33,13 @@ class Board:
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]]
 
+        self.curr_turn = 1
+
+    #############################################################
+    # Receive a tuple of (x,y) for a move, check if valid       #
+    # If valid, add piece to board                              #
+    # Returns bool of a valid move made                         #
+    #############################################################
     def place_piece(self, move, player):
         # If the move is valid, will add the move to the board
         flag = False
@@ -47,15 +50,7 @@ class Board:
         if (self.check_valid_move(move)):
             self.curr_layout[x][y] = player
             flag = True
-            # Reaccumulate all pieces on the board
-            self.player1_pieces = 0
-            self.player2_pieces = 0
-            for row in self.curr_layout:
-                for number in row:
-                    if (number == 1):
-                        self.player1_pieces += 1
-                    elif (number == 2):
-                        self.player2_pieces += 1
+
         return flag
 
     def print_layout(self):
@@ -64,8 +59,6 @@ class Board:
             print("| " + str(row[0]) + " " + str(row[1]) + " " + str(row[2]) + " " + str(row[3]) + " " +
                   str(row[4]) + " " + str(row[5]) + " " + str(row[6]) + " " + str(row[7]) + " |")
         print("===================")
-
-    # ---------- Getters and Setters ----------
 
     def get_player1_pieces(self):
         return self.player1_pieces
@@ -88,12 +81,19 @@ class Board:
         else:
             self.curr_turn = 1
 
+    #############################################################
+    # Receives a move as an (x,y) pair, determines if it is     #
+    # a valid move based on previously calculated board         #
+    #############################################################
     def check_valid_move(self, move):
         if (self.curr_layout[move[0]][move[1]] == 3):
             return True
         else:
             return False
 
+    #############################################################
+    # Determines if at least one playable move exists this turn #
+    #############################################################
     def isPossibleMove(self):
         for rowIndex in range(len(self.curr_layout)):
             for columnIndex in range(len(self.curr_layout[rowIndex])):
@@ -110,6 +110,9 @@ class Board:
 
         return total
 
+    #############################################################
+    # Picks winner of the game by who has the most tiles        #
+    #############################################################
     def determineWinner(self):
         winner = 0
         num_one = self.numberOfTiles(1)
@@ -453,11 +456,31 @@ class Board:
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout, valid_flip
 
+    #############################################################
+    # Saves the current board layout and turn to the game's     #
+    # history list                                              #
+    #############################################################
     def save_to_history(self):
         self.game_history.append((copy.deepcopy(self.curr_layout),self.curr_turn))
 
+    def clear_history(self):
+        self.game_history = [([
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]]
+            ,1)]
+
+    #############################################################
+    # Reverts the game to the state from 2 turns ago            #
+    # This puts the game back to the last turn made by whoever  #
+    # initiated the undo. Wipes history succeeding undo         #
+    #############################################################
     def undo(self):
-        # looks in game history to find board layout from two turns ago
         if (len(self.game_history) > 2):
             self.curr_layout = copy.deepcopy(self.game_history[-3][0])
             self.curr_turn = self.game_history[-3][1]
