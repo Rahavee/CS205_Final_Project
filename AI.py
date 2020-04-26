@@ -1,10 +1,19 @@
 import random
 
+#############################################################
+# Class used to define the opponent, this creates automated #
+# Moves for a human to play against if they are the only one#
+# playing the game                                          #
+#############################################################
 class opponent():
     def __init__(self, isEasy):
         self.easyDiff = isEasy
         self.possibleMove = True
-        
+    
+    #############################################################
+    # Generate a move based on a random selection of possible   #
+    # moves                                                     #
+    #############################################################
     def pick_next_move_easy(self, gameBoard):
         currentLayout = gameBoard
         possibleMoveList = []
@@ -21,7 +30,11 @@ class opponent():
             move = random.choice(possibleMoveList)
             #print(move)
             return move
-    
+    #############################################################
+    # Select a legal move from a list of possible moves.        #
+    # This function picks some moves over others as it will lead#
+    # to a more likely victory see ideal moves below            #
+    #############################################################
     def pick_next_move_difficult(self, gameBoard):
         #Ideal moves for the gameBoard
         #If one of these moves is available take it
@@ -102,19 +115,30 @@ class opponent():
         elif (len(possibleMoveList) > 0):
             move = random.choice(possibleMoveList)
             return move
-    
-        #Check for three one moves
+            
+    #############################################################
+    # Pick the next move based on whether easy or difficult game#
+    # play has been selected                                    #
+    #############################################################
     def pick_next_move(self, gameBoard):
         if (self.easyDiff):
             return self.pick_next_move_easy(gameBoard)
         else:
             return self.pick_next_move_difficult(gameBoard)
             
+    #############################################################
+    # Set whether this AI has a possible move                   #
+    #############################################################    
     def setPossibleMove(self, possible):
         self.possibleMove = possible
-        
+    #############################################################
+    # Get whether this AI has a possible move                   #
+    #############################################################  
     def getPossibleMove(self):
         return self.possibleMove
         
+    #############################################################
+    # Set difficulty of the AI player for the game              #
+    #############################################################
     def setDifficulty(self, isEasy):
         self.easyDiff = isEasy
