@@ -209,7 +209,7 @@ def eventListener(position):
 
 
 def mainGameLoop():
-    global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd
+    global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd, player1, player2
     pygame.init()
 
 
@@ -261,9 +261,12 @@ def mainGameLoop():
 
                 # Player 2's turn and legal moves exist
                 elif (game.get_current_turn() == 2 and game.isPossibleMove()):
+                     print("player 2's turn")
                      if (player2 == 1):
+                        print("human's turn")
                         do_human_move(2)
                      elif (player2 == 2):
+                        print("Ai's turn")
                         do_ai_move(2)
 
                 else:
@@ -291,7 +294,7 @@ def do_ai_move(player_number):
         game.switchTurn()
 
 def startScreen(screen):
-    global difficulty, players, start, running, turnOrder
+    global difficulty, players, start, running, turnOrder, player1, player2
     banner = pygame.image.load("gameBanner.jpg")
     screen.blit(banner, (10, 10))
     diff = []
@@ -328,7 +331,6 @@ def startScreen(screen):
                 players = 2
             if turn[0].isOver(position):
                 turnOrder = 1
-                game.set_current_turn(1)
                 if (players == 1): # If only one human player, set them to player 1, AI to player 2
                     player1 = 1
                     player2 = 2
@@ -337,7 +339,6 @@ def startScreen(screen):
                     player2 = 1
             if turn[1].isOver(position):
                 turnOrder = 2
-                game.set_current_turn(2)
                 if (players == 1): # If only one human, set them to player 2, AI to player 1
                     player1 = 2
                     player2 = 1
