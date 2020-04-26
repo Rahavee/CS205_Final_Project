@@ -458,7 +458,8 @@ class Board:
 
     def undo(self):
         # looks in game history to find board layout from two turns ago
-        self.curr_layout = copy.deepcopy(self.game_history[-3][0])
-        self.curr_turn = self.game_history[-3][1]
-        self.game_history.pop()
-        self.game_history.pop()
+        if (len(self.game_history) > 2):
+            self.curr_layout = copy.deepcopy(self.game_history[-3][0])
+            self.curr_turn = self.game_history[-3][1]
+            self.game_history.pop()
+            self.game_history.pop()
