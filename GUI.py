@@ -296,7 +296,7 @@ def do_ai_move(player_number):
 def startScreen(screen):
     global difficulty, players, start, running, turnOrder, player1, player2
     banner = pygame.image.load("gameBanner.jpg")
-    screen.blit(banner, (10, 10))
+    screen.blit(banner, (100, 10))
     diff = []
     people = []
     turn = []
@@ -317,6 +317,11 @@ def startScreen(screen):
 
     for event in pygame.event.get():
         # Did the user click?
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+        if event.type == pygame.QUIT:
+            running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if diff[0].isOver(position):
                 difficulty = True
@@ -361,7 +366,7 @@ def endScreen(screen):
 
 
 def helpScreen():
-    global alreadyFullScreen
+    global alreadyFullScreen, running
     pygame.init()
 
     # Set up the drawing window
