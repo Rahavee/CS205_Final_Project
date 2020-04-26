@@ -250,7 +250,9 @@ def eventListener(position):
 #############################################################
 # Function where all setup game functions occur including   #
 # drawing the board, displaying other buttons, changing     #
-# the background colors
+# the background colors also is container for performing    #
+# moves for the AI and player                               #
+#############################################################
 def mainGameLoop():
     global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd, player1, player2, endButtons
     pygame.init()
@@ -430,7 +432,10 @@ def startScreen(screen):
 
     pygame.display.update()
 
-
+#############################################################
+# Displays end sreen which will as user if they want to play#
+# again as well as declare the winner                       # 
+#############################################################
 def endScreen(screen):
     screen.fill((255, 255, 255))
     displayEndButtons(screen)
@@ -438,7 +443,10 @@ def endScreen(screen):
     position = pygame.mouse.get_pos()
     eventListener(position)
 
-
+#############################################################
+# Function creates the new window to display help screen pic#
+# and text information                                      #
+#############################################################
 def helpScreen():
     global alreadyFullScreen, running
     pygame.init()
@@ -498,8 +506,10 @@ def helpScreen():
 
         pygame.display.update()
 
-
-# Code in the following function authored by http://www.pygame.org/pcr/text_rect/index.php
+#############################################################
+# Code in the following function authored by                #
+# http://www.pygame.org/pcr/text_rect/index.php             #
+#############################################################
 def renderText(string, font, rect, text_color, background_color, justification=0):
     final_lines = []
 
