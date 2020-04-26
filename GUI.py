@@ -32,11 +32,11 @@ widthLine = 0
 flag = False
 row = 0
 column = 0
-difficulty = 0
+difficulty = True
 players = 1
 turnOrder = 1
-player1 = 1 # Assumes human is player 1 to start
-player2 = 2 # Assumes AI is player 2 to start
+player1 = 1  # Assumes human is player 1 to start
+player2 = 2  # Assumes AI is player 2 to start
 
 
 # function to get the difficulty chosen. Returns 0 for easy and 1 for difficult
@@ -110,10 +110,10 @@ def drawBoard(screen):
 def changeBackground(screen):
     global bgOptions
     bgOptions = []
-    Button(screen, (255, 255, 255), 870, 400, 100, 50, "background color")
+    Button(screen, (255, 255, 255), 870, 400, 100, 50, "Background color")
     bgOptions.append(Button(screen, red, 840, 470, 30, 30))
     bgOptions.append(Button(screen, blue, 880, 470, 30, 30))
-    bgOptions.append(Button(screen, purple, 920,470, 30, 30))
+    bgOptions.append(Button(screen, purple, 920, 470, 30, 30))
     bgOptions.append(Button(screen, green, 960, 470, 30, 30))
 
 
@@ -139,7 +139,7 @@ def displayOtherButtons(screen):
     otherButtons.append(Button(screen, (210, 210, 210), 950, 200, 130, 80, "Help"))
     otherButtons.append(Button(screen, (210, 210, 210), 750, 100, 150, 80, "Fullscreen"))
     otherButtons.append(Button(screen, (210, 210, 210), 750, 200, 150, 80, "Default Screen"))
-    if(game.get_current_turn() == 1):
+    if (game.get_current_turn() == 1):
         otherButtons.append(Button(screen, (255, 255, 255), 850, 1, 100, 100, "Player 1's Turn"))
     else:
         otherButtons.append(Button(screen, (255, 255, 255), 850, 1, 100, 100, "Player 2's Turn"))
@@ -147,7 +147,7 @@ def displayOtherButtons(screen):
     player2Tiles = "Player 2 tiles = " + str(game.numberOfTiles(2))
     otherButtons.append(Button(screen, (255, 255, 255), 870, 550, 100, 50, player1Tiles))
     otherButtons.append(Button(screen, (255, 255, 255), 870, 600, 100, 100, player2Tiles))
-    otherButtons.append(Button(screen, (210, 210, 255), 870, 300, 120, 80, "undo"))
+    otherButtons.append(Button(screen, (210, 210, 210), 870, 300, 120, 80, "undo"))
 
 
 # Returns the players moves
@@ -193,14 +193,14 @@ def eventListener(position):
                 whatSize = 0
                 alreadyFullScreen = False
             if otherButtons[7].isOver(position):
-                somePlaceHolder= 42
-                #TODO Call undo function from the board class
+                somePlaceHolder = 42
+                # TODO Call undo function from the board class
 
             try:
                 if endButtons[1].isOver(position):
                     game.reset()
                     start = True
-                    flagEnd=False
+                    flagEnd = False
                 if endButtons[2].isOver(position):
                     running = False
                     run = False
@@ -211,7 +211,6 @@ def eventListener(position):
 def mainGameLoop():
     global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd, player1, player2
     pygame.init()
-
 
     infoObject = pygame.display.Info()
     fullScreenSize = [infoObject.current_w, infoObject.current_h]
@@ -237,7 +236,7 @@ def mainGameLoop():
             startScreen(screen)
         else:
             if not flagEnd:
-                #print(difficulty, players)
+                # print(difficulty, players)
 
                 # Draw the screen elements
                 drawBoard(screen)
@@ -254,16 +253,16 @@ def mainGameLoop():
 
                 # Player 1's turn and legal moves exist
                 if (game.get_current_turn() == 1 and game.isPossibleMove()):
-                     if (player1 == 1):
+                    if (player1 == 1):
                         do_human_move(1)
-                     elif (player1 == 2):
+                    elif (player1 == 2):
                         do_ai_move(1)
 
                 # Player 2's turn and legal moves exist
                 elif (game.get_current_turn() == 2 and game.isPossibleMove()):
-                     if (player2 == 1):
+                    if (player2 == 1):
                         do_human_move(2)
-                     elif (player2 == 2):
+                    elif (player2 == 2):
                         do_ai_move(2)
 
                 else:
@@ -278,17 +277,20 @@ def mainGameLoop():
     # Done! Time to quit.
     pygame.quit()
 
+
 def do_human_move(player_number):
     if (game.place_piece((row, column), player_number)):
         game.flip_pieces((row, column))
         game.switchTurn()
 
+
 def do_ai_move(player_number):
-    time.sleep(1) # Sleep for 1 second so user can see what the AI does
+    time.sleep(1)  # Sleep for 1 second so user can see what the AI does
     move = ai.pick_next_move(game.get_current_layout())
     if (game.place_piece(move, player_number)):  # Returns True if place_piece succeeds
         game.flip_pieces(move)
         game.switchTurn()
+
 
 def startScreen(screen):
     global difficulty, players, start, running, turnOrder, player1, player2
@@ -297,16 +299,26 @@ def startScreen(screen):
     diff = []
     people = []
     turn = []
-    Button(screen, (255, 255, 255), 200, 250, 100, 100, "Difficulty")
+    if difficulty:
+        diffBanner = "Diffculty: Easy"
+    else:
+        diffBanner = "Difficulty: Hard"
+    Button(screen, (255, 255, 255), 200, 200, 100, 100, diffBanner)
     diff.append(Button(screen, (210, 210, 210), 100, 300, 100, 100, "Easy"))
-    diff.append(Button(screen, (210, 210, 210), 300, 300, 100, 100, "Difficult"))
-
-    Button(screen, (255, 255, 255), 900, 200, 100, 100, "Players")
+    diff.append(Button(screen, (210, 210, 210), 300, 300, 100, 100, "Hard"))
+    if players == 1:
+        playerBanner = "Players : 1"
+    else:
+        playerBanner = "Players : 2"
+    Button(screen, (255, 255, 255), 900, 200, 100, 100, playerBanner)
     people.append(Button(screen, (210, 210, 210), 800, 300, 100, 100, "1"))
     people.append(Button(screen, (210, 210, 210), 1000, 300, 100, 100, "2"))
-    close = Button(screen, (210, 210, 210), 500, 600, 100, 100, "Game")
-
-    Button(screen, (255, 255, 255), 900, 400, 100, 100, "Turn Order")
+    close = Button(screen, (34, 139, 34), 500, 570, 150, 100, "Play!")
+    if turnOrder == 1:
+        turnOrderBanner = "Turn Order: 1st"
+    else:
+        turnOrderBanner = "Turn Order: 2nd"
+    Button(screen, (255, 255, 255), 900, 400, 100, 100, turnOrderBanner)
     turn.append(Button(screen, (210, 210, 210), 800, 500, 100, 100, "1st"))
     turn.append(Button(screen, (210, 210, 210), 1000, 500, 100, 100, "2nd"))
 
@@ -337,18 +349,18 @@ def startScreen(screen):
                 player2 = 1
             if turn[0].isOver(position):
                 turnOrder = 1
-                if (players == 1): # If only one human player, set them to player 1, AI to player 2
+                if (players == 1):  # If only one human player, set them to player 1, AI to player 2
                     player1 = 1
                     player2 = 2
-                else: # Else, two human players
+                else:  # Else, two human players
                     player1 = 1
                     player2 = 1
             if turn[1].isOver(position):
                 turnOrder = 2
-                if (players == 1): # If only one human, set them to player 2, AI to player 1
+                if (players == 1):  # If only one human, set them to player 2, AI to player 1
                     player1 = 2
                     player2 = 1
-                else: # Else, two human players
+                else:  # Else, two human players
                     player1 = 1
                     player2 = 1
             if close.isOver(position):
@@ -358,8 +370,7 @@ def startScreen(screen):
 
 
 def endScreen(screen):
-
-    screen.fill((255,255,255))
+    screen.fill((255, 255, 255))
     displayEndButtons(screen)
     pygame.display.update()
     position = pygame.mouse.get_pos()
