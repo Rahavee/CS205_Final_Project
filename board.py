@@ -125,7 +125,11 @@ class Board:
         else:
             winner = 3
         return winner
-
+    #############################################################
+    # Generate legal moves based on game rules, then add 3 to   #
+    # the game board location where a piece can legally be      #
+    # placed                                                    #
+    #############################################################
     def generate_legal_moves(self):
         possible_move = 3
         direction = 0
@@ -154,7 +158,13 @@ class Board:
                                                         opponent_prev, direction)
                     self.curr_layout = self.checkRow(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev,
                                                      direction)
-
+    
+    #############################################################
+    # Check rows for all legal moves if the opposite players    #
+    # piece can be sandwitched between current players piece    #
+    # then add it to the game board as a potencial move         #
+    # Done recursively                                          #
+    #############################################################
     def checkRow(self, row, column, player, opponent, opponent_prev, direction):
         possible_move = 3
         empty_space = 0
@@ -187,7 +197,13 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
-
+    
+    #############################################################
+    # Check columns for all legal moves if the opposite players #
+    # piece can be sandwitched between current players piece    #
+    # then add it to the game board as a potencial move         #
+    # Done recursively                                          #
+    #############################################################
     def checkColumn(self, row, column, player, opponent, opponent_prev, direction):
         possible_move = 3
         empty_space = 0
@@ -220,7 +236,12 @@ class Board:
             return self.curr_layout
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
-
+    #############################################################
+    # Check diagonals for all legal moves if the opposite players#
+    # piece can be sandwitched between current players piece    #
+    # then add it to the game board as a potencial move         #
+    # Done recursively                                          #
+    #############################################################
     def checkDiagonals(self, row, column, player, opponent, opponent_prev, direction):
         possible_move = 3
         empty_space = 0
@@ -285,6 +306,10 @@ class Board:
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout
 
+    #############################################################
+    # All Flipping is done in the same manner as checking, see  #
+    # checking for more details. Done Recursively.              #
+    #############################################################
     def flip_pieces(self, move):
         rowIndex, columnIndex = move
         possible_move = 3
@@ -301,14 +326,14 @@ class Board:
 
         self.curr_layout, valid_flip = self.flipDiagonals(rowIndex, columnIndex, player_piece, opponent_piece,
                                                           opponent_prev, direction)
-        # print("Valid flip Diagnal: " + str(valid_flip))
         self.curr_layout, valid_flip = self.flipColumn(rowIndex, columnIndex, player_piece, opponent_piece,
                                                        opponent_prev, direction)
-        # print("Valid flip Column: " + str(valid_flip))
         self.curr_layout, valid_flip = self.flipRow(rowIndex, columnIndex, player_piece, opponent_piece, opponent_prev,
                                                     direction)
-        # print("Valid flip Row: " + str(valid_flip))
-
+    #############################################################
+    # All Flipping is done in the same manner as checking, see  #
+    # checking for more details. Done Recursively.              #
+    #############################################################
     def flipRow(self, row, column, player, opponent, opponent_prev, direction):
         possible_move = 3
         empty_space = 0
@@ -329,9 +354,6 @@ class Board:
             else:
                 return self.curr_layout, valid_flip
         # check if these are valid moves
-        # print("row: " + str(row) + " Column: " + str(column))
-        # self.print_layout()
-        # print(self.curr_layout[row][column])
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout, valid_flip
         elif (self.curr_layout[row][column] == opponent):
@@ -348,6 +370,10 @@ class Board:
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout, valid_flip
 
+    #############################################################
+    # All Flipping is done in the same manner as checking, see  #
+    # checking for more details. Done Recursively.              #
+    #############################################################
     def flipColumn(self, row, column, player, opponent, opponent_prev, direction):
         possible_move = 3
         empty_space = 0
@@ -387,6 +413,10 @@ class Board:
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout, valid_flip
 
+    #############################################################
+    # All Flipping is done in the same manner as checking, see  #
+    # checking for more details. Done Recursively.              #
+    #############################################################
     def flipDiagonals(self, row, column, player, opponent, opponent_prev, direction):
         possible_move = 3
         empty_space = 0
