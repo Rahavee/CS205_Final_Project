@@ -38,36 +38,45 @@ turnOrder = 1
 player1 = 1  # Assumes human is player 1 to start
 player2 = 2  # Assumes AI is player 2 to start
 
-
-# function to get the difficulty chosen. Returns 0 for easy and 1 for difficult
+#############################################################
+# function to get the difficulty chosen. Returns 0 for easy #
+# and 1 for difficult                                       #
+#############################################################
 def getDifficulty():
     return difficulty
 
-
-# function to get number of players. Returns 1 and 2
+#############################################################
+# function to get number of players. Returns 1 and 2        #
+#############################################################
 def getNumberOfPlayers():
     return players
 
-
-# function to get the turn order when playing against AI. Returns 1 for user playing first and 2 for user playing second
+#############################################################
+# function to get the turn order when playing against AI.   #
+# Returns 1 for user playing first and 2 for user playing   #
+# second                                                    #
+#############################################################
 def getTurnOrder():
     return turnOrder
 
-
-# function to get the array from the backend
+#############################################################
+# function to get the array from the backend                #
+#############################################################
 def updateGameArray():
     global gameArray
     gameArray = game.get_current_layout()
     # print(" Getting the array from the backend ")
 
-
-# function to send the array to the backend
+#############################################################
+# function to send the array to the backend                 #
+#############################################################
 def getGameArray():
     # print(" sending the gameArray ")
     return gameArray
 
-
-# function to draw the 8x8 board and the pieces
+#############################################################
+# function to draw the 8x8 board and the pieces             #
+#############################################################
 def drawBoard(screen):
     global tiles
     updateGameArray()
@@ -106,7 +115,10 @@ def drawBoard(screen):
         yCir = yCir + square + 1
 
 
-# buttons for changing the background color
+#############################################################
+# buttons for changing the background color there are 4     #
+# choices for the background color: red, blue purple, green #
+#############################################################
 def changeBackground(screen):
     global bgOptions
     bgOptions = []
@@ -116,7 +128,10 @@ def changeBackground(screen):
     bgOptions.append(Button(screen, purple, 920, 470, 30, 30))
     bgOptions.append(Button(screen, green, 960, 470, 30, 30))
 
-
+#############################################################
+# Display the end game screen questions whether the user    #
+# would like to play again and indicates winner of the game #
+#############################################################
 def displayEndButtons(screen):
     global endButtons
     endButtons = []
@@ -131,7 +146,10 @@ def displayEndButtons(screen):
     elif game.determineWinner() == 3:
         endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "It's a tie!"))
 
-
+#############################################################
+# Display the buttons located to the right of the game board#
+# during actual game play                                   #
+#############################################################
 def displayOtherButtons(screen):
     global otherButtons
     otherButtons = []
@@ -150,11 +168,21 @@ def displayOtherButtons(screen):
     otherButtons.append(Button(screen, (210, 210, 210), 870, 300, 120, 80, "undo"))
 
 
-# Returns the players moves
+#############################################################
+# Returns the players moves                                 #
+#############################################################
 def getNextMove():
     return row, column
 
-
+#############################################################
+# Function listens for button press for the game board      #
+# all of the buttons to the right of the game board,        #
+# including fullscreen, show moves, default screen, help,   #
+# undo, and the background color buttons                    #
+# The listenor also listens for the end game page buttons   #
+# yes and no indiciating whether the user would like to     #
+# play again                                                #
+#############################################################
 def eventListener(position):
     global running, flagEnd, gameArray, background, widthLine, flag, row, column, run, screenSize, whatSize, alreadyFullScreen, start
     for event in pygame.event.get():
@@ -277,13 +305,20 @@ def mainGameLoop():
     # Done! Time to quit.
     pygame.quit()
 
-
+#############################################################
+# Check if a valid move can be made, if it can be made then #
+# place the piece and flip all the appropriate pieces that  #
+# the player as captured                                    #
+#############################################################
 def do_human_move(player_number):
     if (game.place_piece((row, column), player_number)):
         game.flip_pieces((row, column))
         game.switchTurn()
 
-
+#############################################################
+# Perform the move of the AI player, then wait a second to  #
+# make the game feel more realistic instead of instantanious#
+#############################################################
 def do_ai_move(player_number):
     time.sleep(1)  # Sleep for 1 second so user can see what the AI does
     move = ai.pick_next_move(game.get_current_layout())
@@ -291,7 +326,13 @@ def do_ai_move(player_number):
         game.flip_pieces(move)
         game.switchTurn()
 
-
+#############################################################
+# Function displays all buttons and text located on the     #
+# the start screen. Including buttons for Easy, Difficult,  #
+# 1 player, 2 player, going 1st, going 2nd, and the game    #
+# start button. It Also displays the banner on the start    #
+# page                                                      #
+#############################################################
 def startScreen(screen):
     global difficulty, players, start, running, turnOrder, player1, player2
     banner = pygame.image.load("gameBanner.jpg")
