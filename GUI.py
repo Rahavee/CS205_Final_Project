@@ -35,10 +35,11 @@ column = 0
 difficulty = 0
 players = 1
 turnOrder = 1
+player1 = 1 # Assumes human is player 1 to start
+player2 = 2 # Assumes AI is player 2 to start
 
 
 # function to get the difficulty chosen. Returns 0 for easy and 1 for difficult
-
 def getDifficulty():
     return difficulty
 
@@ -236,7 +237,7 @@ def mainGameLoop():
             startScreen(screen)
         else:
             if not flagEnd:
-                print(difficulty, players)
+                #print(difficulty, players)
 
                 # Draw the screen elements
                 drawBoard(screen)
@@ -251,31 +252,22 @@ def mainGameLoop():
                 # Game operations
                 game.generate_legal_moves()
 
-                # Player 2's turn and legal moves exist
+                # Player 1's turn and legal moves exist
                 if (game.get_current_turn() == 1 and game.isPossibleMove()):
-                    if (game.place_piece((row, column), 1)):
-                        game.flip_pieces((row, column))
-                        game.switchTurn()
+                     if (player1 == 1):
+                        do_human_move(1)
+                     elif (player1 == 2):
+                        do_ai_move(1)
 
-                # TODO currently assuming the AI player can only be player 2
-                # TODO cleanup with separate function call
-                # Player 2's turn if human and legal moves exist
-                elif (game.get_current_turn() == 2 and players == 2 and game.isPossibleMove()):
-                    if (game.place_piece((row, column), 2)):
-                        game.flip_pieces((row, column))
-                        game.switchTurn()
-
-                # Player 2's turn if AI and legal moves exist
+                # Player 2's turn and legal moves exist
                 elif (game.get_current_turn() == 2 and game.isPossibleMove()):
-                    time.sleep(1)
-                    move = ai.pick_next_move(game.get_current_layout())
-                    if (game.place_piece(move, 2)):  # Returns True if place_piece succeeds
-                        game.flip_pieces(move)
-                        game.switchTurn()
+                     if (player2 == 1):
+                        do_human_move(2)
+                     elif (player2 == 2):
+                        do_ai_move(2)
 
                 else:
                     flagEnd = True
-
 
             # Neither player has legal moves, game is over
             else:
@@ -286,6 +278,17 @@ def mainGameLoop():
     # Done! Time to quit.
     pygame.quit()
 
+def do_human_move(player_number):
+    if (game.place_piece((row, column), player_number)):
+        game.flip_pieces((row, column))
+        game.switchTurn()
+
+def do_ai_move(player_number):
+    time.sleep(1) # Sleep for 1 second so user can see what the AI does
+    move = ai.pick_next_move(game.get_current_layout())
+    if (game.place_piece(move, player_number)):  # Returns True if place_piece succeeds
+        game.flip_pieces(move)
+        game.switchTurn()
 
 def startScreen(screen):
     global difficulty, players, start, running, turnOrder
@@ -319,11 +322,28 @@ def startScreen(screen):
             if diff[1].isOver(position):
                 difficulty = False
                 ai.setDifficulty(difficulty)
-
+            if people[0].isOver(position):
+                players = 1
             if people[1].isOver(position):
                 players = 2
+            if turn[0].isOver(position):
+                turnOrder = 1
+                game.set_current_turn(1)
+                if (players == 1): # If only one human player, set them to player 1, AI to player 2
+                    player1 = 1
+                    player2 = 2
+                else: # Else, two human players
+                    player1 = 1
+                    player2 = 1
             if turn[1].isOver(position):
                 turnOrder = 2
+                game.set_current_turn(2)
+                if (players == 1): # If only one human, set them to player 2, AI to player 1
+                    player1 = 2
+                    player2 = 1
+                else: # Else, two human players
+                    player1 = 1
+                    player2 = 1
             if close.isOver(position):
                 start = False
 

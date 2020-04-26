@@ -79,6 +79,9 @@ class Board:
     def get_current_layout(self):
         return self.curr_layout
 
+    def set_current_turn(self, turn):
+        self.curr_turn = turn
+
     def switchTurn(self):
         if (self.get_current_turn() == 1):
             self.curr_turn = 2
