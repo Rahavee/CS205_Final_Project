@@ -222,7 +222,10 @@ def eventListener(position):
                 alreadyFullScreen = False
             if otherButtons[7].isOver(position):
                 somePlaceHolder = 42
-                # TODO Call undo function from the board class
+                game.undo()
+                row = 0
+                column = 0
+                updateGameArray()
 
             try:
                 if endButtons[1].isOver(position):
@@ -317,6 +320,7 @@ def do_human_move(player_number):
     if (game.place_piece((row, column), player_number)):
         game.flip_pieces((row, column))
         game.switchTurn()
+        game.save_to_history()
 
 #############################################################
 # Perform the move of the AI player, then wait a second to  #
@@ -328,6 +332,7 @@ def do_ai_move(player_number):
     if (game.place_piece(move, player_number)):  # Returns True if place_piece succeeds
         game.flip_pieces(move)
         game.switchTurn()
+        game.save_to_history()
 
 #############################################################
 # Function displays all buttons and text located on the     #
