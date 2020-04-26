@@ -110,11 +110,11 @@ def drawBoard(screen):
 def changeBackground(screen):
     global bgOptions
     bgOptions = []
-    Button(screen, (255, 255, 255), 900, 300, 100, 100, "background color")
-    bgOptions.append(Button(screen, red, 800, 400, 30, 30))
-    bgOptions.append(Button(screen, blue, 840, 400, 30, 30))
-    bgOptions.append(Button(screen, purple, 880, 400, 30, 30))
-    bgOptions.append(Button(screen, green, 920, 400, 30, 30))
+    Button(screen, (255, 255, 255), 870, 400, 100, 50, "background color")
+    bgOptions.append(Button(screen, red, 840, 470, 30, 30))
+    bgOptions.append(Button(screen, blue, 880, 470, 30, 30))
+    bgOptions.append(Button(screen, purple, 920,470, 30, 30))
+    bgOptions.append(Button(screen, green, 960, 470, 30, 30))
 
 
 def displayEndButtons(screen):
@@ -125,7 +125,7 @@ def displayEndButtons(screen):
     endButtons.append(Button(screen, (210, 210, 210), 400, 500, 100, 100, "No"))
 
     if game.determineWinner() == 1:
-        endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "Player 1 Wins!"))
+        endButtons.append(Button(screen, (255, 255, 255), 500, 100, 100, 100, "Player 1 Wins!"))
     elif game.determineWinner() == 2:
         endButtons.append(Button(screen, (255, 255, 255), 600, 100, 100, 100, "Player 2 Wins"))
     elif game.determineWinner() == 3:
@@ -135,19 +135,19 @@ def displayEndButtons(screen):
 def displayOtherButtons(screen):
     global otherButtons
     otherButtons = []
-    otherButtons.append(Button(screen, (210, 210, 210), 950, 100, 100, 100, "Show moves"))
-    otherButtons.append(Button(screen, (210, 210, 210), 950, 200, 100, 100, "Help"))
-    otherButtons.append(Button(screen, (210, 210, 210), 750, 100, 100, 100, "Fullscreen"))
-    otherButtons.append(Button(screen, (210, 210, 210), 750, 200, 100, 100, "Default Screen Size"))
+    otherButtons.append(Button(screen, (210, 210, 210), 950, 100, 130, 80, "Show moves"))
+    otherButtons.append(Button(screen, (210, 210, 210), 950, 200, 130, 80, "Help"))
+    otherButtons.append(Button(screen, (210, 210, 210), 750, 100, 150, 80, "Fullscreen"))
+    otherButtons.append(Button(screen, (210, 210, 210), 750, 200, 150, 80, "Default Screen"))
     if(game.get_current_turn() == 1):
         otherButtons.append(Button(screen, (255, 255, 255), 850, 1, 100, 100, "Player 1's Turn"))
     else:
         otherButtons.append(Button(screen, (255, 255, 255), 850, 1, 100, 100, "Player 2's Turn"))
     player1Tiles = "Player 1 tiles = " + str(game.numberOfTiles(1))
     player2Tiles = "Player 2 tiles = " + str(game.numberOfTiles(2))
-    otherButtons.append(Button(screen, (255, 255, 255), 900, 500, 100, 100, player1Tiles))
-    otherButtons.append(Button(screen, (255, 255, 255), 900, 600, 100, 100, player2Tiles))
-    otherButtons.append(Button(screen, (210, 210, 255), 1000, 350, 100, 100, "undo"))
+    otherButtons.append(Button(screen, (255, 255, 255), 870, 550, 100, 50, player1Tiles))
+    otherButtons.append(Button(screen, (255, 255, 255), 870, 600, 100, 100, player2Tiles))
+    otherButtons.append(Button(screen, (210, 210, 255), 870, 300, 120, 80, "undo"))
 
 
 # Returns the players moves
@@ -293,7 +293,7 @@ def do_ai_move(player_number):
 def startScreen(screen):
     global difficulty, players, start, running, turnOrder
     banner = pygame.image.load("gameBanner.jpg")
-    screen.blit(banner, (100, 10))
+    screen.blit(banner, (400, 10))
     diff = []
     people = []
     turn = []
