@@ -261,12 +261,9 @@ def mainGameLoop():
 
                 # Player 2's turn and legal moves exist
                 elif (game.get_current_turn() == 2 and game.isPossibleMove()):
-                     print("player 2's turn")
                      if (player2 == 1):
-                        print("human's turn")
                         do_human_move(2)
                      elif (player2 == 2):
-                        print("Ai's turn")
                         do_ai_move(2)
 
                 else:
@@ -332,8 +329,12 @@ def startScreen(screen):
                 ai.setDifficulty(difficulty)
             if people[0].isOver(position):
                 players = 1
+                player1 = 1
+                player2 = 2
             if people[1].isOver(position):
                 players = 2
+                player1 = 1
+                player2 = 1
             if turn[0].isOver(position):
                 turnOrder = 1
                 if (players == 1): # If only one human player, set them to player 1, AI to player 2
