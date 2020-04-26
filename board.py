@@ -1,10 +1,9 @@
-import enum
+import copy
 from AI import opponent
 
 
 class Board:
     def __init__(self, num_humans, first_turn, difficulty):
-        # TODO initial attributes in constructor - difficulty, show / hide moves, number of human players
 
         self.num_humans = num_humans
         self.curr_turn = first_turn
@@ -23,8 +22,9 @@ class Board:
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]]
-
         self.game_over = False
+
+        self.game_history = [(copy.deepcopy(self.curr_layout),self.curr_turn)]
 
     def reset(self):
         self.curr_layout = [
@@ -99,8 +99,6 @@ class Board:
             for columnIndex in range(len(self.curr_layout[rowIndex])):
                 if (self.curr_layout[rowIndex][columnIndex] == 3):
                     return True
-                    # print("game still happening")
-        # print("game over")
         return False
 
     def numberOfTiles(self, player):
@@ -201,14 +199,11 @@ class Board:
                 return self.curr_layout
         elif (direction == 2):
             # return if outside of board
-            # print(len(self.curr_layout))
             if (len(self.curr_layout) - 1 > row > 0):
                 row = row + 1
             else:
                 return self.curr_layout
         # check if these are valid moves
-        # print("Row: " + str(row))
-        # print("Column: " + str(column))
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout
         elif (self.curr_layout[row][column] == opponent):
@@ -273,8 +268,6 @@ class Board:
             else:
                 return self.curr_layout
         # check if these are valid moves
-        # print("Row: " + str(row))
-        # print("Column: " + str(column))
         if (self.curr_layout[row][column] == possible_move):
             return self.curr_layout
         elif (self.curr_layout[row][column] == opponent):
@@ -459,3 +452,13 @@ class Board:
             return self.curr_layout, valid_flip
         elif (self.curr_layout[row][column] == empty_space):
             return self.curr_layout, valid_flip
+
+    def save_to_history(self):
+        self.game_history.append((copy.deepcopy(self.curr_layout),self.curr_turn))
+
+    def undo(self):
+        # looks in game history to find board layout from two turns ago
+        self.curr_layout = copy.deepcopy(self.game_history[-3][0])
+        self.curr_turn = self.game_history[-3][1]
+        self.game_history.pop()
+        self.game_history.pop()
