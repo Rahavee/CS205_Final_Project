@@ -235,7 +235,10 @@ def eventListener(position):
             except:
                 pass
 
-
+#############################################################
+# Function where all setup game functions occur including   #
+# drawing the board, displaying other buttons, changing     #
+# the background colors
 def mainGameLoop():
     global screenSize, fullScreenSize, whatSize, alreadyFullScreen, running, flagEnd, player1, player2
     pygame.init()
